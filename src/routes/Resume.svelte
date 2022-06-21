@@ -148,7 +148,7 @@
 		color: rgba(0, 0, 0, 0.9);
 		font-size: 16px;
     	line-height: 24px;
-		font-weight: 400;
+		font-weight: 600;
 	}
 
 	.item-subtitle {

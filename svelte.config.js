@@ -16,7 +16,19 @@ const config = {
 		preprocess({
 			postcss: true
 		})
-	]
+	],
+
+	vite: {
+		server: {
+			fs: {
+				allow: ['locales']
+			}
+		}
+	}, 
+
+	experimental: {
+		useVitePreprocess: true
+	}
 };
 
 export default config;

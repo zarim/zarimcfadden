@@ -13,21 +13,25 @@
 <a href="mailto:zmuhammad55@gmail.com" class="link-block">
     <p class="email">Email me!</p>
 </a>
+<div class="social-media">
+    <a class="image-link" target="_blank" href="https://www.linkedin.com/in/zari-mcfadden-45262978/"><img class="icon-image" src="https://i.ibb.co/wrVVYTH/linkedin.png" alt="linkedin" border="0"></a>
+    <a class="image-link" target="_blank" href="https://github.com/zarim"><img class="icon-image" src="https://i.ibb.co/yqchxF6/github.png" alt="github" border="0"></a>
+    <a class="image-link" target="_blank" href="https://twitter.com/ZariMcFadden"><img class="icon-image" src="https://i.ibb.co/ssN6MZ5/twitter.png" alt="twitter" border="0"></a>
+</div>
 <div class="intro-container">
     <Intro />
-    <img src={src} alt="zari" /> 
+    <img class="zari" src={src} alt="zari" /> 
 </div>
 
 <style>
     .intro-container {
         display: flex;
-        margin: 3% auto;
-        /* justify-content: space-between; */
+        margin: 1% auto;
         flex-direction: row;
         width: 45%;
     }
 
-    img {
+    .zari {
         height: 400px;
         float: right;
         width: fit-content;
@@ -42,7 +46,7 @@
         font-family: 'Maison mono', sans-serif;
         color: rgba(0, 0, 0, 0.3);
         font-size: 16px;
-        font-weight: 300;
+        font-weight: 400;
         text-align: center;
         text-decoration: none;
     }
@@ -56,4 +60,17 @@
         padding-top: 80px;
     }
     
+    .social-media {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .icon-image {
+        height: 30px;
+    }
+
+    .image-link {
+        margin: 0 1%;
+    }
 </style>
