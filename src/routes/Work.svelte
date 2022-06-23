@@ -12,9 +12,11 @@
 
 <script>
 	import Header from './Header.svelte';
-	import WorkItem from './WorkItem.svelte'
+	import WorkItem from './WorkItem.svelte';
+    import WorkMenu from './WorkMenu.svelte'
 	export const prerender = true;
 	export let works;
+    let i=""
 </script>
 
 <svelte:head>
@@ -22,10 +24,11 @@
 </svelte:head>
 
 <Header page="work" />
+<WorkMenu />
 
 <div class="work-container">
     {#each works as w}
-    <div class="work">
+    <div class="work" id={w._id}>
         <WorkItem item={w} />
     </div>
     {/each}
@@ -35,8 +38,10 @@
     .work-container {
         display: flex;
         flex-flow: row wrap;
-        margin: 8%;
+        padding: 8%;
         justify-content: center;
+        background-color: #f7f9fa;
+        overflow: hidden;
     }
 
     .work {
