@@ -1,12 +1,13 @@
 <script>
-    export let id;
+    export let i;
+    // console.log("I:", i)
 </script>
 
 <div class="menu-bar">
     <div class="left-side">
-        <a href="/Work#{id}"><h1 class="section-title-left">WORK 1</h1></a>
-        <a href="/Work#{id}"><h1 class="section-title-left">WORK 2</h1></a>
-        <a href="/Work#{id}"><h1 class="section-title-left">WORK 3</h1></a>
+        <a href="#62a0b331be76709eea2af8a4"><h1 class="section-title-left">WORK 1</h1></a>
+        <a href="#62a0b340be76709eea2af8a6"><h1 class="section-title-left">WORK 2</h1></a>
+        <a href="/Work#{i}"><h1 class="section-title-left">WORK 3</h1></a>
     </div>
     <div class="right-side">
         <a href="/Work#"><h1 class="section-title-right">WEB</h1></a>

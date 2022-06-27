@@ -4,19 +4,19 @@
 
 <div class="menu">
     {#if page == "about"}
-        <a href="/" style="color: #323649;">About</a>
-        <a href="/Work" >Work</a>
-        <a href="/Resume">Resume</a>
+        <a sveltekit:prefetch href="/" style="color: #323649;">About</a>
+        <a sveltekit:prefetch href="/Work" >Work</a>
+        <a sveltekit:prefetch href="/Resume">Resume</a>
     {/if}
     {#if page == "work" }
-        <a href="/">About</a>
-        <a href="/Work" style="color: #323649;">Work</a>
-        <a href="/Resume">Resume</a>
+        <a sveltekit:prefetch href="/">About</a>
+        <a sveltekit:prefetch href="/Work" style="color: #323649;">Work</a>
+        <a sveltekit:prefetch href="/Resume">Resume</a>
     {/if}
     {#if page == "resume" }
-        <a href="/">About</a>
-        <a href="/Work" >Work</a>
-        <a href="/Resume" style="color: #323649;">Resume</a>
+        <a sveltekit:prefetch href="/">About</a>
+        <a sveltekit:prefetch href="/Work" >Work</a>
+        <a sveltekit:prefetch href="/Resume" style="color: #323649;">Resume</a>
     {/if}
 </div>
 
