@@ -12,14 +12,17 @@
 </script>
 
 <script>
+    import { onMount } from 'svelte';
 	import Header from './Header.svelte';
 	import WorkItem from './WorkItem.svelte';
     import WorkMenu from './WorkMenu.svelte'
 	export const prerender = true;
-    export let web;
     export let ios;
     export let element;
     
+    onMount(() => {
+        document.getElementById("iosMenu").style.color = "#323649";
+    })
 
     console.log(element)
 </script>
@@ -30,14 +33,6 @@
 
 <Header page="work" />
 <WorkMenu />
-
-<div class="work-container" id="web">
-    {#each web as w}
-    <div class="work" id={w._id} style="background-color: {w.backgroundColor};">
-        <WorkItem item={w} />
-    </div>
-    {/each}
-</div>
 
 <div class="work-container" id="ios">
     {#each ios as i}

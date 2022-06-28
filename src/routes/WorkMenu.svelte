@@ -1,17 +1,17 @@
 <script>
-    export let i;
+    // export let i;
     // console.log("I:", i)
 </script>
 
 <div class="menu-bar">
     <div class="left-side">
-        <a href="#62a0b331be76709eea2af8a4"><h1 class="section-title-left">WORK 1</h1></a>
-        <a href="#62a0b340be76709eea2af8a6"><h1 class="section-title-left">WORK 2</h1></a>
-        <a href="/Work#{i}"><h1 class="section-title-left">WORK 3</h1></a>
+        <a href="/Work"><h1 class="section-title-left">WORK 1</h1></a>
+        <a href="/Work"><h1 class="section-title-left">WORK 2</h1></a>
+        <a href="/Work"><h1 class="section-title-left">WORK 3</h1></a>
     </div>
     <div class="right-side">
-        <a href="/Work#"><h1 class="section-title-right">WEB</h1></a>
-        <a href="/Work#"><h1 class="section-title-right">iOS</h1></a>
+        <a href="/WebWork#web" element={"web"}><h1 class="section-title-right" id="webMenu">WEB</h1></a>
+        <a href="/iOSWork#ios" element={"ios"}><h1 class="section-title-right" id="iosMenu">iOS</h1></a>
     </div>
 </div>
 
