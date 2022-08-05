@@ -49,8 +49,4 @@
     .work {
         display: contents;
     }
-
-    a:link{
-        color: #323649
-    }
 </style>
