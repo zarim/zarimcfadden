@@ -28,16 +28,9 @@
 
 <style>
     .work-item {
-        /* width: 400px; */
-        /* height: 250px; */
         display: flex;
         width: 100%;
         height: 100vh;
-        /* min-height: 1000px; */
-        /* margin: 3%; */
-        /* border: 1px;
-        border-style: solid;
-        border-color: #323649; */
         position: relative;
         padding: 8%;
     }
@@ -46,8 +39,6 @@
         width: 65vw;
         height: 100%;
         object-fit: contain;
-        /* display: flex; */
-        /* margin: auto; */
         display: flex;
         justify-content: center;
     }
@@ -56,20 +47,15 @@
         font-size: 1.25em;
         margin: 2.5%;
         text-decoration: none;
-        /* text-align: center; */
     }
 
     .work-subtext {
         font-size: 0.75em;
         margin: 2.5%;
-        /* text-align: center; */
     }
 
     .text {
         display: flex;
-        /* bottom: 0; */
-        /* position: absolute; */
-        /* padding: 1%; */
         width: 30%;
         height: 100%;
         flex-direction: column;

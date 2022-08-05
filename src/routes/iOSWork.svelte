@@ -4,7 +4,6 @@
 		const jsonRes = await res.json()
 		return {
 			props: {
-                web: jsonRes.webItems,
                 ios: jsonRes.iosItems
 			}
 		}
@@ -12,17 +11,12 @@
 </script>
 
 <script>
-    import { onMount } from 'svelte';
 	import Header from './Header.svelte';
 	import WorkItem from './WorkItem.svelte';
     import WorkMenu from './WorkMenu.svelte'
 	export const prerender = true;
     export let ios;
     export let element;
-    
-    onMount(() => {
-        document.getElementById("iosMenu").style.color = "#323649";
-    })
 
     console.log(element)
 </script>
@@ -32,16 +26,15 @@
 </svelte:head>
 
 <Header page="work" />
-<WorkMenu />
+<WorkMenu items={ios} type={"ios"}/>
 
-<div class="work-container" id="ios">
-    {#each ios as i}
-    <div class="work" id={i._id} style="background-color: {i.backgroundColor};">
+{#each ios as i}
+<div class="work-container" id={i.title}>
+    <div class="work" id={i.title} style="background-color: {i.backgroundColor};">
         <WorkItem item={i} />
     </div>
-    {/each}
 </div>
-
+{/each}
 <style>
     .work-container {
         display: flex;

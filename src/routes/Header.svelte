@@ -27,8 +27,6 @@
     .sub-text {
         text-align: center;
         color: rgba(0, 0, 0, 0.6);
-        /* color: rgba(91,94,110,.59); */
-        /* color: rgba(0, 0, 0, 0.6); */
         font-size: 20px;
         line-height: 26px;
         padding-bottom: 70px;

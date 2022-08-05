@@ -4,27 +4,19 @@
 		const jsonRes = await res.json()
 		return {
 			props: {
-                web: jsonRes.webItems,
-                ios: jsonRes.iosItems
+                web: jsonRes.webItems
 			}
 		}
 	}
 </script>
 
 <script>
-    import { onMount } from 'svelte';
 	import Header from './Header.svelte';
 	import WorkItem from './WorkItem.svelte';
     import WorkMenu from './WorkMenu.svelte'
 	export const prerender = true;
     export let web;
-    export let element;
 
-    onMount(() => {
-        document.getElementById("webMenu").style.color = "#323649";
-    })
-
-    console.log(element)
 </script>
 
 <svelte:head>
@@ -32,15 +24,15 @@
 </svelte:head>
 
 <Header page="work" />
-<WorkMenu />
+<WorkMenu items={web} type={"web"}/>
 
-<div class="work-container" id="web">
-    {#each web as w}
-    <div class="work" id={w._id} style="background-color: {w.backgroundColor};">
+{#each web as w}
+<div class="work-container" id={w.title}>
+    <div class="work" id={w.title} style="background-color: {w.backgroundColor};">
         <WorkItem item={w} />
     </div>
-    {/each}
 </div>
+{/each}
 
 <style>
     .work-container {
@@ -50,7 +42,15 @@
         overflow: hidden;
     }
 
+    .work-container:active {
+        color: #323649
+    }
+
     .work {
         display: contents;
+    }
+
+    a:link{
+        color: #323649
     }
 </style>

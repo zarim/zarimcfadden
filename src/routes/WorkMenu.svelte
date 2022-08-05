@@ -1,19 +1,37 @@
 <script>
-    // export let i;
-    // console.log("I:", i)
+    export let items;
+    export let type;
 </script>
 
-<div class="menu-bar">
-    <div class="left-side">
-        <a href="/Work"><h1 class="section-title-left">WORK 1</h1></a>
-        <a href="/Work"><h1 class="section-title-left">WORK 2</h1></a>
-        <a href="/Work"><h1 class="section-title-left">WORK 3</h1></a>
+{#if type=="web"}
+    <div class="menu-bar">
+        <div class="left-side">
+            {#each items as i}
+                <a sveltekit:prefetch href="/WebWork#{i.title}"><h1 class="section-title-left">{i.title}</h1></a>
+            {/each}
+        </div>
+        <div class="right-side">
+            <a sveltekit:prefetch href="/WebWork#web" element={"web"}><h1 class="section-title-right" style="color: #323649" id="webMenu">WEB</h1></a>
+            <a sveltekit:prefetch href="/iOSWork#ios" element={"ios"}><h1 class="section-title-right" id="iosMenu">iOS</h1></a>
+        </div>
     </div>
-    <div class="right-side">
-        <a href="/WebWork#web" element={"web"}><h1 class="section-title-right" id="webMenu">WEB</h1></a>
-        <a href="/iOSWork#ios" element={"ios"}><h1 class="section-title-right" id="iosMenu">iOS</h1></a>
+{/if}
+
+{#if type=="ios" }
+    <div class="menu-bar">
+        <div class="left-side">
+            {#each items as i}
+                <a href="/iOSWork# {i.title}"><h1 style="color: #323649" class="section-title-left">{i.title}</h1></a>
+            {/each}
+        </div>
+        <div class="right-side">
+            <a href="/WebWork#web" element={"web"}><h1 class="section-title-right" id="webMenu">WEB</h1></a>
+            <a href="/iOSWork#ios" element={"ios"}><h1 class="section-title-right" style="color: #323649" id="iosMenu">iOS</h1></a>
+        </div>
     </div>
-</div>
+{/if}
+
+
 
 <style>
     .menu-bar {
@@ -58,8 +76,6 @@
 		line-height: 24px;
 		font-weight: 700;
 		letter-spacing: 1px;
-		/* text-transform: uppercase; */
-		/* margin-bottom: 24px; */
         float: right;
 	}
 
