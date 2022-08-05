@@ -16,9 +16,6 @@
     import WorkMenu from './WorkMenu.svelte'
 	export const prerender = true;
     export let ios;
-    export let element;
-
-    console.log(element)
 </script>
 
 <svelte:head>
