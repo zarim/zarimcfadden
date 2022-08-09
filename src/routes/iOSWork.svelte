@@ -19,7 +19,7 @@
 </script>
 
 <svelte:head>
-  <title>Work</title>
+  <title>iOS Work</title>
 </svelte:head>
 
 <Header page="work" />

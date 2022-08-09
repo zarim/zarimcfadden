@@ -20,7 +20,7 @@
 </script>
 
 <svelte:head>
-  <title>Work</title>
+  <title>Web Work</title>
 </svelte:head>
 
 <Header page="work" />

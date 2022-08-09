@@ -1,13 +1,39 @@
 <script>
+    import { onMount } from 'svelte';
+    import { page } from '$app/stores';
     export let items;
     export let type;
+
+    onMount(async () => {
+        // async function fetchData() {
+        //     console.log($page.url.href)
+        // }
+
+        // const interval = setInterval(fetchData, 10000);
+        // fetchData();
+
+        // return () => clearInterval(interval);
+
+	});
+
+    // window.body.addEventListener('click', console.log($page.url.href));
+
+    // function getPage(event) {
+    //     document.body.addEventListener('click', hide, false);
+    //     console.log($page.url.href)
+    // }
+
+    function onClick(event) {
+        console.log($page.url.href)
+    }
+
 </script>
 
 {#if type=="web"}
     <div class="menu-bar">
         <div class="left-side">
             {#each items as i}
-                <a sveltekit:prefetch href="/WebWork#{i.title}"><h1 class="section-title-left">{i.title}</h1></a>
+                <a sveltekit:prefetch href="/WebWork#{i.title}" on:click={onClick}><h1 class="section-title-left" >{i.title}</h1></a>
             {/each}
         </div>
         <div class="right-side">
@@ -30,8 +56,6 @@
         </div>
     </div>
 {/if}
-
-
 
 <style>
     .menu-bar {
