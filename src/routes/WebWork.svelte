@@ -4,8 +4,7 @@
 		const jsonRes = await res.json()
 		return {
 			props: {
-                web: jsonRes.webItems,
-                ios: jsonRes.iosItems
+                web: jsonRes.webItems
 			}
 		}
 	}
@@ -17,35 +16,23 @@
     import WorkMenu from './WorkMenu.svelte'
 	export const prerender = true;
     export let web;
-    export let ios;
-    export let element;
-    
 
-    console.log(element)
 </script>
 
 <svelte:head>
-  <title>Work</title>
+  <title>Web Work</title>
 </svelte:head>
 
 <Header page="work" />
-<WorkMenu />
+<WorkMenu items={web} type={"web"}/>
 
-<div class="work-container" id="web">
-    {#each web as w}
-    <div class="work" id={w._id} style="background-color: {w.backgroundColor};">
+{#each web as w}
+<div class="work-container" id={w.title}>
+    <div class="work" id={w.title} style="background-color: {w.backgroundColor};">
         <WorkItem item={w} />
     </div>
-    {/each}
 </div>
-
-<div class="work-container" id="ios">
-    {#each ios as i}
-    <div class="work" id={i._id} style="background-color: {i.backgroundColor};">
-        <WorkItem item={i} />
-    </div>
-    {/each}
-</div>
+{/each}
 
 <style>
     .work-container {
@@ -53,6 +40,10 @@
         flex-flow: row wrap;
         justify-content: center;
         overflow: hidden;
+    }
+
+    .work-container:active {
+        color: #323649
     }
 
     .work {

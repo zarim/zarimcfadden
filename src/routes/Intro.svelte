@@ -1,7 +1,4 @@
 <div class="intro">
-    <!-- <h1>
-        Hi, I'm Zari!
-    </h1> -->
     <p>
         <br>
         I am currently a PhD student in Computer Science at North Carolina State University studying AI for Social Good. I completed my B.S. in Computer Science at Spelman College in 2020.
@@ -17,12 +14,6 @@
         margin: 0 2%; 
     }
 
-    /* h1 {
-        font-weight: 300;
-        font-size: 35px;
-        text-align: left;
-        margin: auto;
-    } */
     p {
         line-height: 1.6;
         font-weight: 300;
