@@ -33,7 +33,7 @@
     <div class="menu-bar">
         <div class="left-side">
             {#each items as i}
-                <a href="/iOSWork# {i.title}"><h1 style="color: #323649" class="section-title-left">{i.title}</h1></a>
+                <a sveltekit:prefetch href="/iOSWork#{i.title}" on:click={onClick(`id: ${i.title}`)}><h1 class="section-title-left" id='id: {i.title}'>{i.title}</h1></a>
             {/each}
         </div>
         <div class="right-side">
