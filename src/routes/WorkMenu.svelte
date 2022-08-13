@@ -4,27 +4,13 @@
     export let items;
     export let type;
 
-    onMount(async () => {
-        // async function fetchData() {
-        //     console.log($page.url.href)
-        // }
+    function onClick(title) {
 
-        // const interval = setInterval(fetchData, 10000);
-        // fetchData();
+        for (let i = 0; i < items.length; i++) {
+            document.getElementById(`id: ${items[i].title}`).style = "color: rgba(0, 0, 0, 0.3);"
+        }
 
-        // return () => clearInterval(interval);
-
-	});
-
-    // window.body.addEventListener('click', console.log($page.url.href));
-
-    // function getPage(event) {
-    //     document.body.addEventListener('click', hide, false);
-    //     console.log($page.url.href)
-    // }
-
-    function onClick(event) {
-        console.log($page.url.href)
+        document.getElementById(title).style = "color: #323649;"
     }
 
 </script>
@@ -33,7 +19,7 @@
     <div class="menu-bar">
         <div class="left-side">
             {#each items as i}
-                <a sveltekit:prefetch href="/WebWork#{i.title}" on:click={onClick}><h1 class="section-title-left" >{i.title}</h1></a>
+                <a sveltekit:prefetch href="/WebWork#{i.title}" on:click={onClick(`id: ${i.title}`)}><h1 class="section-title-left" id='id: {i.title}'>{i.title}</h1></a>
             {/each}
         </div>
         <div class="right-side">
