@@ -274,10 +274,10 @@ function init(manifest) {
 	// });
 
 	return async (event, context) => {
-		if (init_promise !== null) {
-			await init_promise;
-			init_promise = null;
-		}
+		// if (init_promise !== null) {
+		// 	await init_promise;
+		// 	init_promise = null;
+		// }
 
 		const response = await server.respond(to_request(event), {
 			platform: { context },
