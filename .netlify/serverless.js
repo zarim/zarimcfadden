@@ -269,9 +269,9 @@ function split_headers(headers) {
 function init(manifest) {
 	const server = new _0SERVER.Server(manifest);
 
-	let init_promise = server.init({
-		env: process.env
-	});
+	// let init_promise = server.init({
+	// 	env: process.env
+	// });
 
 	return async (event, context) => {
 		if (init_promise !== null) {
