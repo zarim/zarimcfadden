@@ -28,7 +28,7 @@ __export(stdin_exports, {
 module.exports = __toCommonJS(stdin_exports);
 var import_index_59524ad9 = require("../../chunks/index-59524ad9.js");
 var import_Menu_svelte = __toESM(require("./Menu.svelte.js"));
-var Header_svelte_svelte_type_style_lang = /* @__PURE__ */ (() => ".header-container.svelte-puhlc6{display:flex;flex-direction:column;border-bottom:0.25px solid rgba(0, 0, 0, 0.2)}.name.svelte-puhlc6{text-align:center;padding-top:170px;font-size:32px;line-height:48px;font-weight:500}.sub-text.svelte-puhlc6{text-align:center;color:rgba(0, 0, 0, 0.6);font-size:20px;line-height:26px;padding-bottom:70px}")();
+var Header_svelte_svelte_type_style_lang = "";
 const css = {
   code: ".header-container.svelte-puhlc6{display:flex;flex-direction:column;border-bottom:0.25px solid rgba(0, 0, 0, 0.2)}.name.svelte-puhlc6{text-align:center;padding-top:170px;font-size:32px;line-height:48px;font-weight:500}.sub-text.svelte-puhlc6{text-align:center;color:rgba(0, 0, 0, 0.6);font-size:20px;line-height:26px;padding-bottom:70px}",
   map: null

@@ -21,7 +21,7 @@ __export(stdin_exports, {
 });
 module.exports = __toCommonJS(stdin_exports);
 var import_index_59524ad9 = require("../../chunks/index-59524ad9.js");
-var Intro_svelte_svelte_type_style_lang = /* @__PURE__ */ (() => ".intro.svelte-1fpmf43{display:flex;align-items:center;margin:0 2%}p.svelte-1fpmf43{line-height:1.6;font-weight:300;font-size:20px;text-align:left;margin:auto}a.svelte-1fpmf43{color:inherit;text-decoration:underline}")();
+var Intro_svelte_svelte_type_style_lang = "";
 const css = {
   code: ".intro.svelte-1fpmf43{display:flex;align-items:center;margin:0 2%}p.svelte-1fpmf43{line-height:1.6;font-weight:300;font-size:20px;text-align:left;margin:auto}a.svelte-1fpmf43{color:inherit;text-decoration:underline}",
   map: null

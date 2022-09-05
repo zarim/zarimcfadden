@@ -32,7 +32,7 @@ var import_Header_svelte = __toESM(require("./Header.svelte.js"));
 var import_WorkItem_svelte = __toESM(require("./WorkItem.svelte.js"));
 var import_WorkMenu_svelte = __toESM(require("./WorkMenu.svelte.js"));
 var import_Menu_svelte = require("./Menu.svelte.js");
-var iOSWork_svelte_svelte_type_style_lang = /* @__PURE__ */ (() => ".work-container.svelte-c5kli{display:flex;flex-flow:row wrap;justify-content:center;overflow:hidden}.work.svelte-c5kli{display:contents}")();
+var iOSWork_svelte_svelte_type_style_lang = "";
 const css = {
   code: ".work-container.svelte-c5kli{display:flex;flex-flow:row wrap;justify-content:center;overflow:hidden}.work.svelte-c5kli{display:contents}",
   map: null

@@ -21,7 +21,7 @@ __export(stdin_exports, {
 });
 module.exports = __toCommonJS(stdin_exports);
 var import_index_59524ad9 = require("../../chunks/index-59524ad9.js");
-var WorkItem_svelte_svelte_type_style_lang = /* @__PURE__ */ (() => ".work-item.svelte-1ljhtqv{display:flex;width:100%;height:100vh;position:relative;padding:8%}.image.svelte-1ljhtqv{width:65vw;height:100%;-o-object-fit:contain;object-fit:contain;display:flex;justify-content:center}.work-text.svelte-1ljhtqv{font-size:1.25em;margin:2.5%;text-decoration:none}.work-subtext.svelte-1ljhtqv{font-size:0.75em;margin:2.5%}.text.svelte-1ljhtqv{display:flex;width:30%;height:100%;flex-direction:column;justify-content:center}")();
+var WorkItem_svelte_svelte_type_style_lang = "";
 const css = {
   code: ".work-item.svelte-1ljhtqv{display:flex;width:100%;height:100vh;position:relative;padding:8%}.image.svelte-1ljhtqv{width:65vw;height:100%;-o-object-fit:contain;object-fit:contain;display:flex;justify-content:center}.work-text.svelte-1ljhtqv{font-size:1.25em;margin:2.5%;text-decoration:none}.work-subtext.svelte-1ljhtqv{font-size:0.75em;margin:2.5%}.text.svelte-1ljhtqv{display:flex;width:30%;height:100%;flex-direction:column;justify-content:center}",
   map: null
