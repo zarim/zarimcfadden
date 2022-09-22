@@ -31,7 +31,7 @@ const manifest = {
   assets: /* @__PURE__ */ new Set(["favicon-16x16.png", "favicon-32x32.png", "favicon_package_v0.16/android-chrome-192x192.png", "favicon_package_v0.16/android-chrome-512x512.png", "favicon_package_v0.16/apple-touch-icon.png", "favicon_package_v0.16/browserconfig.xml", "favicon_package_v0.16/favicon-16x16.png", "favicon_package_v0.16/favicon-32x32.png", "favicon_package_v0.16/favicon.ico", "favicon_package_v0.16/mstile-150x150.png", "favicon_package_v0.16/safari-pinned-tab.svg", "favicon_package_v0.16/site.webmanifest"]),
   mimeTypes: { ".png": "image/png", ".xml": "application/xml", ".ico": "image/vnd.microsoft.icon", ".svg": "image/svg+xml", ".webmanifest": "application/manifest+json" },
   _: {
-    entry: { "file": "start-831b3b0b.js", "js": ["start-831b3b0b.js", "chunks/index-613948cd.js"], "css": [] },
+    entry: { "file": "start-c39186fb.js", "js": ["start-c39186fb.js", "chunks/index-613948cd.js"], "css": [] },
     nodes: [
       () => Promise.resolve().then(() => __toESM(require("./nodes/0.js"))),
       () => Promise.resolve().then(() => __toESM(require("./nodes/1.js"))),
