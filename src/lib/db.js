@@ -1,6 +1,7 @@
 import dontenv from 'dotenv'
 import { MongoClient } from 'mongodb'
 dontenv.config()
+require('dotenv').config()
 
 const uri = process.env.MONGO_URI
 const options = {
