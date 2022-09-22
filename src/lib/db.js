@@ -2,7 +2,7 @@ import dontenv from 'dotenv'
 import { MongoClient } from 'mongodb'
 dontenv.config()
 
-const uri = process.env['MONGO_URI']
+const uri = env.MONGO_URI
 const options = {
   useNewUrlParser: true, 
   useUnifiedTopology: true
