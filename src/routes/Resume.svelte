@@ -4,6 +4,15 @@
 		const resEducation = await fetch('/todos/education')
 		const jsonResWork = await resWork.json()
 		const jsonResEducation = await resEducation.json()
+
+		if (jsonResWork.workItems.length == 0) {
+            jsonResWork.workItems = []
+        } 
+
+		if (jsonResEducation.educationItems.length == 0) {
+			jsonResEducation.educationItems = []
+		}
+
 		return {
 			props: {
 				works: jsonResWork.workItems,

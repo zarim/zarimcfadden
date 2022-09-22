@@ -2,6 +2,11 @@
     export async function load({fetch}) {
 		const res = await fetch('/todos/project')
 		const jsonRes = await res.json()
+
+        if (jsonRes.webItems.length == 0) {
+            jsonRes.webItems = []
+        }
+
 		return {
 			props: {
                 web: jsonRes.webItems
