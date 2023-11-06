@@ -20,6 +20,9 @@ const WorkSchema = new Schema({
     },
     backgroundColor: {
         type: String
+    },
+    year: {
+        type: String
     }
 })
 

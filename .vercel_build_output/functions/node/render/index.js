@@ -6354,7 +6354,7 @@ var init__10 = __esm({
     index10 = 8;
     entry10 = "pages/Work.svelte-597707dc.js";
     js10 = ["pages/Work.svelte-597707dc.js", "chunks/index-613948cd.js", "pages/Header.svelte-64e06afe.js", "pages/Menu.svelte-68177f87.js", "pages/WorkItem.svelte-ea0cf982.js", "pages/WorkMenu.svelte-6e6b5979.js"];
-    css19 = ["assets/pages/iOSWork.svelte-dc654aae.css", "assets/pages/Header.svelte-4055f18e.css", "assets/pages/Menu.svelte-4eb8d690.css", "assets/pages/WorkItem.svelte-b7e8ec1c.css", "assets/pages/WorkMenu.svelte-3a881f10.css"];
+    css19 = ["assets/pages/Work.svelte-f28308a4.css", "assets/pages/Header.svelte-4055f18e.css", "assets/pages/Menu.svelte-4eb8d690.css", "assets/pages/WorkItem.svelte-b7e8ec1c.css", "assets/pages/WorkMenu.svelte-3a881f10.css"];
   }
 });
 
@@ -6458,7 +6458,7 @@ var init__13 = __esm({
     index13 = 11;
     entry13 = "pages/iOSWork.svelte-81c948b3.js";
     js13 = ["pages/iOSWork.svelte-81c948b3.js", "chunks/index-613948cd.js", "pages/Header.svelte-64e06afe.js", "pages/Menu.svelte-68177f87.js", "pages/WorkItem.svelte-ea0cf982.js", "pages/WorkMenu.svelte-6e6b5979.js"];
-    css23 = ["assets/pages/iOSWork.svelte-dc654aae.css", "assets/pages/Header.svelte-4055f18e.css", "assets/pages/Menu.svelte-4eb8d690.css", "assets/pages/WorkItem.svelte-b7e8ec1c.css", "assets/pages/WorkMenu.svelte-3a881f10.css"];
+    css23 = ["assets/pages/Work.svelte-f28308a4.css", "assets/pages/Header.svelte-4055f18e.css", "assets/pages/Menu.svelte-4eb8d690.css", "assets/pages/WorkItem.svelte-b7e8ec1c.css", "assets/pages/WorkMenu.svelte-3a881f10.css"];
   }
 });
 
@@ -22621,6 +22621,389 @@ var require_saslprep = __commonJS({
   }
 });
 
+// ../../node_modules/aws4/lru.js
+var require_lru = __commonJS({
+  "../../node_modules/aws4/lru.js"(exports, module2) {
+    module2.exports = function(size) {
+      return new LruCache(size);
+    };
+    function LruCache(size) {
+      this.capacity = size | 0;
+      this.map = /* @__PURE__ */ Object.create(null);
+      this.list = new DoublyLinkedList();
+    }
+    LruCache.prototype.get = function(key2) {
+      var node = this.map[key2];
+      if (node == null)
+        return void 0;
+      this.used(node);
+      return node.val;
+    };
+    LruCache.prototype.set = function(key2, val) {
+      var node = this.map[key2];
+      if (node != null) {
+        node.val = val;
+      } else {
+        if (!this.capacity)
+          this.prune();
+        if (!this.capacity)
+          return false;
+        node = new DoublyLinkedNode(key2, val);
+        this.map[key2] = node;
+        this.capacity--;
+      }
+      this.used(node);
+      return true;
+    };
+    LruCache.prototype.used = function(node) {
+      this.list.moveToFront(node);
+    };
+    LruCache.prototype.prune = function() {
+      var node = this.list.pop();
+      if (node != null) {
+        delete this.map[node.key];
+        this.capacity++;
+      }
+    };
+    function DoublyLinkedList() {
+      this.firstNode = null;
+      this.lastNode = null;
+    }
+    DoublyLinkedList.prototype.moveToFront = function(node) {
+      if (this.firstNode == node)
+        return;
+      this.remove(node);
+      if (this.firstNode == null) {
+        this.firstNode = node;
+        this.lastNode = node;
+        node.prev = null;
+        node.next = null;
+      } else {
+        node.prev = null;
+        node.next = this.firstNode;
+        node.next.prev = node;
+        this.firstNode = node;
+      }
+    };
+    DoublyLinkedList.prototype.pop = function() {
+      var lastNode = this.lastNode;
+      if (lastNode != null) {
+        this.remove(lastNode);
+      }
+      return lastNode;
+    };
+    DoublyLinkedList.prototype.remove = function(node) {
+      if (this.firstNode == node) {
+        this.firstNode = node.next;
+      } else if (node.prev != null) {
+        node.prev.next = node.next;
+      }
+      if (this.lastNode == node) {
+        this.lastNode = node.prev;
+      } else if (node.next != null) {
+        node.next.prev = node.prev;
+      }
+    };
+    function DoublyLinkedNode(key2, val) {
+      this.key = key2;
+      this.val = val;
+      this.prev = null;
+      this.next = null;
+    }
+  }
+});
+
+// ../../node_modules/aws4/aws4.js
+var require_aws4 = __commonJS({
+  "../../node_modules/aws4/aws4.js"(exports) {
+    var aws4 = exports;
+    var url = require("url");
+    var querystring = require("querystring");
+    var crypto2 = require("crypto");
+    var lru = require_lru();
+    var credentialsCache = lru(1e3);
+    function hmac(key2, string, encoding) {
+      return crypto2.createHmac("sha256", key2).update(string, "utf8").digest(encoding);
+    }
+    function hash2(string, encoding) {
+      return crypto2.createHash("sha256").update(string, "utf8").digest(encoding);
+    }
+    function encodeRfc3986(urlEncodedString) {
+      return urlEncodedString.replace(/[!'()*]/g, function(c) {
+        return "%" + c.charCodeAt(0).toString(16).toUpperCase();
+      });
+    }
+    function encodeRfc3986Full(str) {
+      return encodeRfc3986(encodeURIComponent(str));
+    }
+    var HEADERS_TO_IGNORE = {
+      "authorization": true,
+      "connection": true,
+      "x-amzn-trace-id": true,
+      "user-agent": true,
+      "expect": true,
+      "presigned-expires": true,
+      "range": true
+    };
+    function RequestSigner(request, credentials) {
+      if (typeof request === "string")
+        request = url.parse(request);
+      var headers = request.headers = request.headers || {}, hostParts = (!this.service || !this.region) && this.matchHost(request.hostname || request.host || headers.Host || headers.host);
+      this.request = request;
+      this.credentials = credentials || this.defaultCredentials();
+      this.service = request.service || hostParts[0] || "";
+      this.region = request.region || hostParts[1] || "us-east-1";
+      if (this.service === "email")
+        this.service = "ses";
+      if (!request.method && request.body)
+        request.method = "POST";
+      if (!headers.Host && !headers.host) {
+        headers.Host = request.hostname || request.host || this.createHost();
+        if (request.port)
+          headers.Host += ":" + request.port;
+      }
+      if (!request.hostname && !request.host)
+        request.hostname = headers.Host || headers.host;
+      this.isCodeCommitGit = this.service === "codecommit" && request.method === "GIT";
+      this.extraHeadersToIgnore = request.extraHeadersToIgnore || /* @__PURE__ */ Object.create(null);
+      this.extraHeadersToInclude = request.extraHeadersToInclude || /* @__PURE__ */ Object.create(null);
+    }
+    RequestSigner.prototype.matchHost = function(host) {
+      var match = (host || "").match(/([^\.]+)\.(?:([^\.]*)\.)?amazonaws\.com(\.cn)?$/);
+      var hostParts = (match || []).slice(1, 3);
+      if (hostParts[1] === "es" || hostParts[1] === "aoss")
+        hostParts = hostParts.reverse();
+      if (hostParts[1] == "s3") {
+        hostParts[0] = "s3";
+        hostParts[1] = "us-east-1";
+      } else {
+        for (var i2 = 0; i2 < 2; i2++) {
+          if (/^s3-/.test(hostParts[i2])) {
+            hostParts[1] = hostParts[i2].slice(3);
+            hostParts[0] = "s3";
+            break;
+          }
+        }
+      }
+      return hostParts;
+    };
+    RequestSigner.prototype.isSingleRegion = function() {
+      if (["s3", "sdb"].indexOf(this.service) >= 0 && this.region === "us-east-1")
+        return true;
+      return ["cloudfront", "ls", "route53", "iam", "importexport", "sts"].indexOf(this.service) >= 0;
+    };
+    RequestSigner.prototype.createHost = function() {
+      var region = this.isSingleRegion() ? "" : "." + this.region, subdomain = this.service === "ses" ? "email" : this.service;
+      return subdomain + region + ".amazonaws.com";
+    };
+    RequestSigner.prototype.prepareRequest = function() {
+      this.parsePath();
+      var request = this.request, headers = request.headers, query;
+      if (request.signQuery) {
+        this.parsedPath.query = query = this.parsedPath.query || {};
+        if (this.credentials.sessionToken)
+          query["X-Amz-Security-Token"] = this.credentials.sessionToken;
+        if (this.service === "s3" && !query["X-Amz-Expires"])
+          query["X-Amz-Expires"] = 86400;
+        if (query["X-Amz-Date"])
+          this.datetime = query["X-Amz-Date"];
+        else
+          query["X-Amz-Date"] = this.getDateTime();
+        query["X-Amz-Algorithm"] = "AWS4-HMAC-SHA256";
+        query["X-Amz-Credential"] = this.credentials.accessKeyId + "/" + this.credentialString();
+        query["X-Amz-SignedHeaders"] = this.signedHeaders();
+      } else {
+        if (!request.doNotModifyHeaders && !this.isCodeCommitGit) {
+          if (request.body && !headers["Content-Type"] && !headers["content-type"])
+            headers["Content-Type"] = "application/x-www-form-urlencoded; charset=utf-8";
+          if (request.body && !headers["Content-Length"] && !headers["content-length"])
+            headers["Content-Length"] = Buffer.byteLength(request.body);
+          if (this.credentials.sessionToken && !headers["X-Amz-Security-Token"] && !headers["x-amz-security-token"])
+            headers["X-Amz-Security-Token"] = this.credentials.sessionToken;
+          if (this.service === "s3" && !headers["X-Amz-Content-Sha256"] && !headers["x-amz-content-sha256"])
+            headers["X-Amz-Content-Sha256"] = hash2(this.request.body || "", "hex");
+          if (headers["X-Amz-Date"] || headers["x-amz-date"])
+            this.datetime = headers["X-Amz-Date"] || headers["x-amz-date"];
+          else
+            headers["X-Amz-Date"] = this.getDateTime();
+        }
+        delete headers.Authorization;
+        delete headers.authorization;
+      }
+    };
+    RequestSigner.prototype.sign = function() {
+      if (!this.parsedPath)
+        this.prepareRequest();
+      if (this.request.signQuery) {
+        this.parsedPath.query["X-Amz-Signature"] = this.signature();
+      } else {
+        this.request.headers.Authorization = this.authHeader();
+      }
+      this.request.path = this.formatPath();
+      return this.request;
+    };
+    RequestSigner.prototype.getDateTime = function() {
+      if (!this.datetime) {
+        var headers = this.request.headers, date = new Date(headers.Date || headers.date || new Date());
+        this.datetime = date.toISOString().replace(/[:\-]|\.\d{3}/g, "");
+        if (this.isCodeCommitGit)
+          this.datetime = this.datetime.slice(0, -1);
+      }
+      return this.datetime;
+    };
+    RequestSigner.prototype.getDate = function() {
+      return this.getDateTime().substr(0, 8);
+    };
+    RequestSigner.prototype.authHeader = function() {
+      return [
+        "AWS4-HMAC-SHA256 Credential=" + this.credentials.accessKeyId + "/" + this.credentialString(),
+        "SignedHeaders=" + this.signedHeaders(),
+        "Signature=" + this.signature()
+      ].join(", ");
+    };
+    RequestSigner.prototype.signature = function() {
+      var date = this.getDate(), cacheKey = [this.credentials.secretAccessKey, date, this.region, this.service].join(), kDate, kRegion, kService, kCredentials = credentialsCache.get(cacheKey);
+      if (!kCredentials) {
+        kDate = hmac("AWS4" + this.credentials.secretAccessKey, date);
+        kRegion = hmac(kDate, this.region);
+        kService = hmac(kRegion, this.service);
+        kCredentials = hmac(kService, "aws4_request");
+        credentialsCache.set(cacheKey, kCredentials);
+      }
+      return hmac(kCredentials, this.stringToSign(), "hex");
+    };
+    RequestSigner.prototype.stringToSign = function() {
+      return [
+        "AWS4-HMAC-SHA256",
+        this.getDateTime(),
+        this.credentialString(),
+        hash2(this.canonicalString(), "hex")
+      ].join("\n");
+    };
+    RequestSigner.prototype.canonicalString = function() {
+      if (!this.parsedPath)
+        this.prepareRequest();
+      var pathStr = this.parsedPath.path, query = this.parsedPath.query, headers = this.request.headers, queryStr = "", normalizePath = this.service !== "s3", decodePath = this.service === "s3" || this.request.doNotEncodePath, decodeSlashesInPath = this.service === "s3", firstValOnly = this.service === "s3", bodyHash;
+      if (this.service === "s3" && this.request.signQuery) {
+        bodyHash = "UNSIGNED-PAYLOAD";
+      } else if (this.isCodeCommitGit) {
+        bodyHash = "";
+      } else {
+        bodyHash = headers["X-Amz-Content-Sha256"] || headers["x-amz-content-sha256"] || hash2(this.request.body || "", "hex");
+      }
+      if (query) {
+        var reducedQuery = Object.keys(query).reduce(function(obj, key2) {
+          if (!key2)
+            return obj;
+          obj[encodeRfc3986Full(key2)] = !Array.isArray(query[key2]) ? query[key2] : firstValOnly ? query[key2][0] : query[key2];
+          return obj;
+        }, {});
+        var encodedQueryPieces = [];
+        Object.keys(reducedQuery).sort().forEach(function(key2) {
+          if (!Array.isArray(reducedQuery[key2])) {
+            encodedQueryPieces.push(key2 + "=" + encodeRfc3986Full(reducedQuery[key2]));
+          } else {
+            reducedQuery[key2].map(encodeRfc3986Full).sort().forEach(function(val) {
+              encodedQueryPieces.push(key2 + "=" + val);
+            });
+          }
+        });
+        queryStr = encodedQueryPieces.join("&");
+      }
+      if (pathStr !== "/") {
+        if (normalizePath)
+          pathStr = pathStr.replace(/\/{2,}/g, "/");
+        pathStr = pathStr.split("/").reduce(function(path, piece) {
+          if (normalizePath && piece === "..") {
+            path.pop();
+          } else if (!normalizePath || piece !== ".") {
+            if (decodePath)
+              piece = decodeURIComponent(piece.replace(/\+/g, " "));
+            path.push(encodeRfc3986Full(piece));
+          }
+          return path;
+        }, []).join("/");
+        if (pathStr[0] !== "/")
+          pathStr = "/" + pathStr;
+        if (decodeSlashesInPath)
+          pathStr = pathStr.replace(/%2F/g, "/");
+      }
+      return [
+        this.request.method || "GET",
+        pathStr,
+        queryStr,
+        this.canonicalHeaders() + "\n",
+        this.signedHeaders(),
+        bodyHash
+      ].join("\n");
+    };
+    RequestSigner.prototype.canonicalHeaders = function() {
+      var headers = this.request.headers;
+      function trimAll(header) {
+        return header.toString().trim().replace(/\s+/g, " ");
+      }
+      return Object.keys(headers).filter(function(key2) {
+        return HEADERS_TO_IGNORE[key2.toLowerCase()] == null;
+      }).sort(function(a, b) {
+        return a.toLowerCase() < b.toLowerCase() ? -1 : 1;
+      }).map(function(key2) {
+        return key2.toLowerCase() + ":" + trimAll(headers[key2]);
+      }).join("\n");
+    };
+    RequestSigner.prototype.signedHeaders = function() {
+      var extraHeadersToInclude = this.extraHeadersToInclude, extraHeadersToIgnore = this.extraHeadersToIgnore;
+      return Object.keys(this.request.headers).map(function(key2) {
+        return key2.toLowerCase();
+      }).filter(function(key2) {
+        return extraHeadersToInclude[key2] || HEADERS_TO_IGNORE[key2] == null && !extraHeadersToIgnore[key2];
+      }).sort().join(";");
+    };
+    RequestSigner.prototype.credentialString = function() {
+      return [
+        this.getDate(),
+        this.region,
+        this.service,
+        "aws4_request"
+      ].join("/");
+    };
+    RequestSigner.prototype.defaultCredentials = function() {
+      var env = process.env;
+      return {
+        accessKeyId: env.AWS_ACCESS_KEY_ID || env.AWS_ACCESS_KEY,
+        secretAccessKey: env.AWS_SECRET_ACCESS_KEY || env.AWS_SECRET_KEY,
+        sessionToken: env.AWS_SESSION_TOKEN
+      };
+    };
+    RequestSigner.prototype.parsePath = function() {
+      var path = this.request.path || "/";
+      if (/[^0-9A-Za-z;,/?:@&=+$\-_.!~*'()#%]/.test(path)) {
+        path = encodeURI(decodeURI(path));
+      }
+      var queryIx = path.indexOf("?"), query = null;
+      if (queryIx >= 0) {
+        query = querystring.parse(path.slice(queryIx + 1));
+        path = path.slice(0, queryIx);
+      }
+      this.parsedPath = {
+        path,
+        query
+      };
+    };
+    RequestSigner.prototype.formatPath = function() {
+      var path = this.parsedPath.path, query = this.parsedPath.query;
+      if (!query)
+        return path;
+      if (query[""] != null)
+        delete query[""];
+      return path + "?" + encodeRfc3986(querystring.stringify(query));
+    };
+    aws4.RequestSigner = RequestSigner;
+    aws4.sign = function(request, credentials) {
+      return new RequestSigner(request, credentials).sign();
+    };
+  }
+});
+
 // node_modules/mongodb/lib/deps.js
 var require_deps = __commonJS({
   "node_modules/mongodb/lib/deps.js"(exports) {
@@ -22670,7 +23053,7 @@ var require_deps = __commonJS({
     }
     exports.aws4 = makeErrorModule(new error_1.MongoMissingDependencyError("Optional module `aws4` not found. Please install it to enable AWS authentication"));
     try {
-      exports.aws4 = require("aws4");
+      exports.aws4 = require_aws4();
     } catch {
     }
     exports.AutoEncryptionLoggerLevel = Object.freeze({
@@ -33324,14 +33707,14 @@ var require_lib3 = __commonJS({
   }
 });
 
-// .svelte-kit/output/server/chunks/db-2f0139e2.js
+// .svelte-kit/output/server/chunks/db-da77f925.js
 var import_dotenv, import_mongodb, uri, options, client, clientPromise, clientPromise$1;
-var init_db_2f0139e2 = __esm({
-  ".svelte-kit/output/server/chunks/db-2f0139e2.js"() {
+var init_db_da77f925 = __esm({
+  ".svelte-kit/output/server/chunks/db-da77f925.js"() {
     import_dotenv = __toESM(require_main(), 1);
     import_mongodb = __toESM(require_lib3(), 1);
     import_dotenv.default.config();
-    uri = process.env.MONGO_URIclea;
+    uri = process.env.MONGO_URI;
     options = {
       useNewUrlParser: true,
       useUnifiedTopology: true
@@ -33363,7 +33746,7 @@ async function get() {
   try {
     const dbConnection = await clientPromise$1;
     const db = dbConnection.db("test").collection("works");
-    const workItems = await db.find().toArray();
+    const workItems = await db.find().sort({ year: -1 }).toArray();
     if (!workItems) {
       throw new Error("No work items.");
     }
@@ -33411,7 +33794,7 @@ async function post(request) {
 var import_mongodb2, import_dotenv2;
 var init_work = __esm({
   ".svelte-kit/output/server/entries/endpoints/todos/work.js"() {
-    init_db_2f0139e2();
+    init_db_da77f925();
     import_mongodb2 = __toESM(require_lib3(), 1);
     import_dotenv2 = __toESM(require_main(), 1);
   }
@@ -33452,7 +33835,7 @@ async function get2() {
 var import_mongodb3, import_dotenv3;
 var init_project = __esm({
   ".svelte-kit/output/server/entries/endpoints/todos/project.js"() {
-    init_db_2f0139e2();
+    init_db_da77f925();
     import_mongodb3 = __toESM(require_lib3(), 1);
     import_dotenv3 = __toESM(require_main(), 1);
   }
@@ -33468,7 +33851,7 @@ async function get3() {
   try {
     const dbConnection = await clientPromise$1;
     const db = dbConnection.db("test").collection("educations");
-    const educationItems = await db.find().toArray();
+    const educationItems = await db.find().sort({ year: -1 }).toArray();
     if (!educationItems) {
       throw new Error("No education items.");
     }
@@ -33514,7 +33897,7 @@ async function post2(request) {
 var import_mongodb4, import_dotenv4;
 var init_education = __esm({
   ".svelte-kit/output/server/entries/endpoints/todos/education.js"() {
-    init_db_2f0139e2();
+    init_db_da77f925();
     import_mongodb4 = __toESM(require_lib3(), 1);
     import_dotenv4 = __toESM(require_main(), 1);
   }
@@ -36102,7 +36485,7 @@ var manifest = {
   assets: /* @__PURE__ */ new Set(["favicon-16x16.png", "favicon-32x32.png", "favicon_package_v0.16/android-chrome-192x192.png", "favicon_package_v0.16/android-chrome-512x512.png", "favicon_package_v0.16/apple-touch-icon.png", "favicon_package_v0.16/browserconfig.xml", "favicon_package_v0.16/favicon-16x16.png", "favicon_package_v0.16/favicon-32x32.png", "favicon_package_v0.16/favicon.ico", "favicon_package_v0.16/mstile-150x150.png", "favicon_package_v0.16/safari-pinned-tab.svg", "favicon_package_v0.16/site.webmanifest"]),
   mimeTypes: { ".png": "image/png", ".xml": "application/xml", ".ico": "image/vnd.microsoft.icon", ".svg": "image/svg+xml", ".webmanifest": "application/manifest+json" },
   _: {
-    entry: { "file": "start-0e1932be.js", "js": ["start-0e1932be.js", "chunks/index-613948cd.js"], "css": [] },
+    entry: { "file": "start-72be97bd.js", "js": ["start-72be97bd.js", "chunks/index-613948cd.js"], "css": [] },
     nodes: [
       () => Promise.resolve().then(() => (init__(), __exports)),
       () => Promise.resolve().then(() => (init__2(), __exports2)),

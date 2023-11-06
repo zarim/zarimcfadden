@@ -6,7 +6,7 @@ export async function get() {
     try {
         const dbConnection = await clientPromise;
         const db = dbConnection.db("test").collection('educations')
-        const educationItems = await db.find().toArray()
+        const educationItems = await db.find().sort({year: -1}).toArray()
 
         if(!educationItems) {
             throw new Error("No education items.")
