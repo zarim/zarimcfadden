@@ -5,7 +5,7 @@
 
 <div class="header-container">
     <p class="name">Zari McFadden</p>
-    <p class="sub-text">Ph.D. Student / Durham Native / Spelman Woman</p>
+    <p class="sub-text">Ph.D. Candidate / Durham Native / Spelman Woman</p>
     <Menu page={page}/>
 </div>
 
