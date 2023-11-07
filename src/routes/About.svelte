@@ -28,7 +28,7 @@
         display: flex;
         margin: 1% auto;
         flex-direction: row;
-        width: 45%;
+        width: 60%;
     }
 
     .zari {

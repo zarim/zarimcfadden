@@ -1,9 +1,9 @@
 <div class="intro">
     <p>
         <br>
-        I am currently a PhD student in Computer Science at North Carolina State University studying AI for Social Good. I completed my B.S. in Computer Science at Spelman College in 2020.
+        I am currently a PhD candidate in Computer Science at North Carolina State University studying systems of oppression in computer science research. My research is focused on creating a tool that helps researchers critically engage with systems of oppression in their research. I completed my B.S. in Computer Science at Spelman College in 2020.
         <br><br>
-        In my free time, I'm a world traveler, avid reader, and self-published author of a book titled <a href="https://www.amazon.com/18-Things-Ive-Learned-Years/dp/0578485303" target="_blank">18 Things I've Learned in 18 Years</a>.
+        In my free time, I'm training for a marathon, traveling the world, and reading. I am also a self-published author of a book titled <a href="https://www.amazon.com/18-Things-Ive-Learned-Years/dp/0578485303" target="_blank">18 Things I've Learned in 18 Years</a>.
     </p>
 </div>
 
