@@ -178,7 +178,7 @@ var init_multipart_parser = __esm({
         let i2 = 0;
         const length_ = data.length;
         let previousIndex = this.index;
-        let { lookbehind, boundary, boundaryChars, index: index14, state, flags } = this;
+        let { lookbehind, boundary, boundaryChars, index: index15, state, flags } = this;
         const boundaryLength = this.boundary.length;
         const boundaryEnd = boundaryLength - 1;
         const bufferLength = data.length;
@@ -212,20 +212,20 @@ var init_multipart_parser = __esm({
           c = data[i2];
           switch (state) {
             case S.START_BOUNDARY:
-              if (index14 === boundary.length - 2) {
+              if (index15 === boundary.length - 2) {
                 if (c === HYPHEN) {
                   flags |= F.LAST_BOUNDARY;
                 } else if (c !== CR) {
                   return;
                 }
-                index14++;
+                index15++;
                 break;
-              } else if (index14 - 1 === boundary.length - 2) {
+              } else if (index15 - 1 === boundary.length - 2) {
                 if (flags & F.LAST_BOUNDARY && c === HYPHEN) {
                   state = S.END;
                   flags = 0;
                 } else if (!(flags & F.LAST_BOUNDARY) && c === LF) {
-                  index14 = 0;
+                  index15 = 0;
                   callback("onPartBegin");
                   state = S.HEADER_FIELD_START;
                 } else {
@@ -233,29 +233,29 @@ var init_multipart_parser = __esm({
                 }
                 break;
               }
-              if (c !== boundary[index14 + 2]) {
-                index14 = -2;
+              if (c !== boundary[index15 + 2]) {
+                index15 = -2;
               }
-              if (c === boundary[index14 + 2]) {
-                index14++;
+              if (c === boundary[index15 + 2]) {
+                index15++;
               }
               break;
             case S.HEADER_FIELD_START:
               state = S.HEADER_FIELD;
               mark("onHeaderField");
-              index14 = 0;
+              index15 = 0;
             case S.HEADER_FIELD:
               if (c === CR) {
                 clear("onHeaderField");
                 state = S.HEADERS_ALMOST_DONE;
                 break;
               }
-              index14++;
+              index15++;
               if (c === HYPHEN) {
                 break;
               }
               if (c === COLON) {
-                if (index14 === 1) {
+                if (index15 === 1) {
                   return;
                 }
                 dataCallback("onHeaderField", true);
@@ -297,8 +297,8 @@ var init_multipart_parser = __esm({
               state = S.PART_DATA;
               mark("onPartData");
             case S.PART_DATA:
-              previousIndex = index14;
-              if (index14 === 0) {
+              previousIndex = index15;
+              if (index15 === 0) {
                 i2 += boundaryEnd;
                 while (i2 < bufferLength && !(data[i2] in boundaryChars)) {
                   i2 += boundaryLength;
@@ -306,27 +306,27 @@ var init_multipart_parser = __esm({
                 i2 -= boundaryEnd;
                 c = data[i2];
               }
-              if (index14 < boundary.length) {
-                if (boundary[index14] === c) {
-                  if (index14 === 0) {
+              if (index15 < boundary.length) {
+                if (boundary[index15] === c) {
+                  if (index15 === 0) {
                     dataCallback("onPartData", true);
                   }
-                  index14++;
+                  index15++;
                 } else {
-                  index14 = 0;
+                  index15 = 0;
                 }
-              } else if (index14 === boundary.length) {
-                index14++;
+              } else if (index15 === boundary.length) {
+                index15++;
                 if (c === CR) {
                   flags |= F.PART_BOUNDARY;
                 } else if (c === HYPHEN) {
                   flags |= F.LAST_BOUNDARY;
                 } else {
-                  index14 = 0;
+                  index15 = 0;
                 }
-              } else if (index14 - 1 === boundary.length) {
+              } else if (index15 - 1 === boundary.length) {
                 if (flags & F.PART_BOUNDARY) {
-                  index14 = 0;
+                  index15 = 0;
                   if (c === LF) {
                     flags &= ~F.PART_BOUNDARY;
                     callback("onPartEnd");
@@ -340,14 +340,14 @@ var init_multipart_parser = __esm({
                     state = S.END;
                     flags = 0;
                   } else {
-                    index14 = 0;
+                    index15 = 0;
                   }
                 } else {
-                  index14 = 0;
+                  index15 = 0;
                 }
               }
-              if (index14 > 0) {
-                lookbehind[index14 - 1] = c;
+              if (index15 > 0) {
+                lookbehind[index15 - 1] = c;
               } else if (previousIndex > 0) {
                 const _lookbehind = new Uint8Array(lookbehind.buffer, lookbehind.byteOffset, lookbehind.byteLength);
                 callback("onPartData", 0, previousIndex, _lookbehind);
@@ -365,7 +365,7 @@ var init_multipart_parser = __esm({
         dataCallback("onHeaderField");
         dataCallback("onHeaderValue");
         dataCallback("onPartData");
-        this.index = index14;
+        this.index = index15;
         this.state = state;
         this.flags = flags;
       }
@@ -504,9 +504,9 @@ async function consumeBody(data) {
 }
 function fromRawHeaders(headers = []) {
   return new Headers2(
-    headers.reduce((result, value, index14, array2) => {
-      if (index14 % 2 === 0) {
-        result.push(array2.slice(index14, index14 + 2));
+    headers.reduce((result, value, index15, array2) => {
+      if (index15 % 2 === 0) {
+        result.push(array2.slice(index15, index15 + 2));
       }
       return result;
     }, []).filter(([name, value]) => {
@@ -1621,10 +1621,10 @@ var init_polyfills = __esm({
           [PullSteps](readRequest) {
             const stream = this._controlledReadableByteStream;
             if (this._queueTotalSize > 0) {
-              const entry14 = this._queue.shift();
-              this._queueTotalSize -= entry14.byteLength;
+              const entry15 = this._queue.shift();
+              this._queueTotalSize -= entry15.byteLength;
               ReadableByteStreamControllerHandleQueueDrain(this);
-              const view = new Uint8Array(entry14.buffer, entry14.byteOffset, entry14.byteLength);
+              const view = new Uint8Array(entry15.buffer, entry15.byteOffset, entry15.byteLength);
               readRequest._chunkSteps(view);
               return;
             }
@@ -5544,7 +5544,7 @@ function create_ssr_component(fn) {
       return {
         html,
         css: {
-          code: Array.from(result.css).map((css24) => css24.code).join("\n"),
+          code: Array.from(result.css).map((css26) => css26.code).join("\n"),
           map: null
         },
         head: result.title + result.head
@@ -5590,13 +5590,13 @@ var require_cookie = __commonJS({
       var dec = opt.decode || decode2;
       for (var i2 = 0; i2 < pairs.length; i2++) {
         var pair = pairs[i2];
-        var index14 = pair.indexOf("=");
-        if (index14 < 0) {
+        var index15 = pair.indexOf("=");
+        if (index15 < 0) {
           continue;
         }
-        var key2 = pair.substring(0, index14).trim();
+        var key2 = pair.substring(0, index15).trim();
         if (void 0 == obj[key2]) {
-          var val = pair.substring(index14 + 1, pair.length).trim();
+          var val = pair.substring(index15 + 1, pair.length).trim();
           if (val[0] === '"') {
             val = val.slice(1, -1);
           }
@@ -5811,9 +5811,9 @@ var init_Intro_svelte = __esm({
     Intro = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       $$result.css.add(css3);
       return `<div class="${"intro svelte-1fpmf43"}"><p class="${"svelte-1fpmf43"}"><br>
-        I am currently a PhD student in Computer Science at North Carolina State University studying AI for Social Good. I completed my B.S. in Computer Science at Spelman College in 2020.
+        I am currently a PhD candidate in Computer Science at North Carolina State University studying systems of oppression in computer science research. My research is focused on creating a tool that helps researchers critically engage with systems of oppression in their research. I completed my B.S. in Computer Science at Spelman College in 2020.
         <br><br>
-        In my free time, I&#39;m a world traveler, avid reader, and self-published author of a book titled <a href="${"https://www.amazon.com/18-Things-Ive-Learned-Years/dp/0578485303"}" target="${"_blank"}" class="${"svelte-1fpmf43"}">18 Things I&#39;ve Learned in 18 Years</a>.
+        In my free time, I&#39;m training for a marathon, traveling the world, and reading. I am also a self-published author of a book titled <a href="${"https://www.amazon.com/18-Things-Ive-Learned-Years/dp/0578485303"}" target="${"_blank"}" class="${"svelte-1fpmf43"}">18 Things I&#39;ve Learned in 18 Years</a>.
     </p>
 </div>`;
     });
@@ -5830,7 +5830,7 @@ var init_Menu_svelte = __esm({
   ".svelte-kit/output/server/entries/pages/Menu.svelte.js"() {
     init_index_59524ad9();
     css4 = {
-      code: "a.svelte-vga7el{margin:0 0 0 5%;text-decoration:none;color:rgba(0, 0, 0, 0.2);margin:auto}.menu.svelte-vga7el{justify-content:center;display:flex;font-size:20px;font-weight:300;margin:auto;width:20%;padding-bottom:50px}",
+      code: "a.svelte-1ad0618{margin:0 0 0 5%;text-decoration:none;color:rgba(0, 0, 0, 0.2);margin:auto}.menu.svelte-1ad0618{justify-content:center;display:flex;font-size:20px;font-weight:300;margin:auto;width:30%;padding-bottom:50px}",
       map: null
     };
     Menu = create_ssr_component(($$result, $$props, $$bindings, slots) => {
@@ -5838,15 +5838,22 @@ var init_Menu_svelte = __esm({
       if ($$props.page === void 0 && $$bindings.page && page !== void 0)
         $$bindings.page(page);
       $$result.css.add(css4);
-      return `<div class="${"menu svelte-vga7el"}">${page == "about" ? `<a sveltekit:prefetch href="${"/"}" style="${"color: #323649;"}" class="${"svelte-vga7el"}">About</a>
-        <a sveltekit:prefetch href="${"/WebWork"}" class="${"svelte-vga7el"}">Work</a>
-        <a sveltekit:prefetch href="${"/Resume"}" class="${"svelte-vga7el"}">Resume</a>` : ``}
-    ${page == "work" ? `<a sveltekit:prefetch href="${"/"}" class="${"svelte-vga7el"}">About</a>
-        <a sveltekit:prefetch href="${"/WebWork"}" style="${"color: #323649;"}" class="${"svelte-vga7el"}">Work</a>
-        <a sveltekit:prefetch href="${"/Resume"}" class="${"svelte-vga7el"}">Resume</a>` : ``}
-    ${page == "resume" ? `<a sveltekit:prefetch href="${"/"}" class="${"svelte-vga7el"}">About</a>
-        <a sveltekit:prefetch href="${"/WebWork"}" class="${"svelte-vga7el"}">Work</a>
-        <a sveltekit:prefetch href="${"/Resume"}" style="${"color: #323649;"}" class="${"svelte-vga7el"}">Resume</a>` : ``}
+      return `<div class="${"menu svelte-1ad0618"}">${page == "about" ? `<a sveltekit:prefetch href="${"/"}" style="${"color: #323649;"}" class="${"svelte-1ad0618"}">About</a>
+        <a sveltekit:prefetch href="${"/WebWork"}" class="${"svelte-1ad0618"}">Work</a>
+        <a sveltekit:prefetch href="${"/Resume"}" class="${"svelte-1ad0618"}">Resume</a>
+        <a sveltekit:prefetch href="${"/Writings"}" class="${"svelte-1ad0618"}">Writings</a>` : ``}
+    ${page == "work" ? `<a sveltekit:prefetch href="${"/"}" class="${"svelte-1ad0618"}">About</a>
+        <a sveltekit:prefetch href="${"/WebWork"}" style="${"color: #323649;"}" class="${"svelte-1ad0618"}">Work</a>
+        <a sveltekit:prefetch href="${"/Resume"}" class="${"svelte-1ad0618"}">Resume</a>
+        <a sveltekit:prefetch href="${"/Writings"}" class="${"svelte-1ad0618"}">Writings</a>` : ``}
+    ${page == "resume" ? `<a sveltekit:prefetch href="${"/"}" class="${"svelte-1ad0618"}">About</a>
+        <a sveltekit:prefetch href="${"/WebWork"}" class="${"svelte-1ad0618"}">Work</a>
+        <a sveltekit:prefetch href="${"/Resume"}" style="${"color: #323649;"}" class="${"svelte-1ad0618"}">Resume</a>
+        <a sveltekit:prefetch href="${"/Writings"}" class="${"svelte-1ad0618"}">Writings</a>` : ``}
+    ${page == "writings" ? `<a sveltekit:prefetch href="${"/"}" class="${"svelte-1ad0618"}">About</a>
+        <a sveltekit:prefetch href="${"/WebWork"}" class="${"svelte-1ad0618"}">Work</a>
+        <a sveltekit:prefetch href="${"/Resume"}" class="${"svelte-1ad0618"}">Resume</a>
+        <a sveltekit:prefetch href="${"/Writings"}" style="${"color: #323649;"}" class="${"svelte-1ad0618"}">Writings</a>` : ``}
 </div>`;
     });
   }
@@ -5872,7 +5879,7 @@ var init_Header_svelte = __esm({
         $$bindings.page(page);
       $$result.css.add(css5);
       return `<div class="${"header-container svelte-puhlc6"}"><p class="${"name svelte-puhlc6"}">Zari McFadden</p>
-    <p class="${"sub-text svelte-puhlc6"}">Ph.D. Student / Durham Native / Spelman Woman</p>
+    <p class="${"sub-text svelte-puhlc6"}">Ph.D. Candidate / Durham Native / Spelman Woman</p>
     ${validate_component(Menu, "Menu").$$render($$result, { page }, {}, {})}
 </div>`;
     });
@@ -5892,7 +5899,7 @@ var init_About_svelte = __esm({
     init_Header_svelte();
     init_Menu_svelte();
     css6 = {
-      code: ".intro-container.svelte-1gygnwc{display:flex;margin:1% auto;flex-direction:row;width:45%}.zari.svelte-1gygnwc{height:400px;float:right;width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;margin:3% auto;display:flex;align-items:center}.email.svelte-1gygnwc{margin-top:0px;margin-bottom:40px;font-family:'Maison mono', sans-serif;color:rgba(0, 0, 0, 0.3);font-size:16px;font-weight:400;text-align:center;text-decoration:none}.link-block.svelte-1gygnwc{display:block;margin-right:auto;margin-left:auto;text-decoration:none;width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;padding-top:80px}.social-media.svelte-1gygnwc{display:flex;flex-direction:row;justify-content:center}.icon-image.svelte-1gygnwc{height:30px}.image-link.svelte-1gygnwc{margin:0 1%}",
+      code: ".intro-container.svelte-es1kr1{display:flex;margin:1% auto;flex-direction:row;width:60%}.zari.svelte-es1kr1{height:400px;float:right;width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;margin:3% auto;display:flex;align-items:center}.email.svelte-es1kr1{margin-top:0px;margin-bottom:40px;font-family:'Maison mono', sans-serif;color:rgba(0, 0, 0, 0.3);font-size:16px;font-weight:400;text-align:center;text-decoration:none}.link-block.svelte-es1kr1{display:block;margin-right:auto;margin-left:auto;text-decoration:none;width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;padding-top:80px}.social-media.svelte-es1kr1{display:flex;flex-direction:row;justify-content:center}.icon-image.svelte-es1kr1{height:30px}.image-link.svelte-es1kr1{margin:0 1%}",
       map: null
     };
     src = "https://i.ibb.co/NFRyV8D/zari.jpg";
@@ -5904,12 +5911,12 @@ var init_About_svelte = __esm({
       return `${$$result.head += `${$$result.title = `<title>About</title>`, ""}`, ""}
 
 ${validate_component(Header, "Header").$$render($$result, { page: "about" }, {}, {})}
-<a href="${"mailto:zmuhammad55@gmail.com"}" class="${"link-block svelte-1gygnwc"}"><p class="${"email svelte-1gygnwc"}">Email me!</p></a>
-<div class="${"social-media svelte-1gygnwc"}"><a class="${"image-link svelte-1gygnwc"}" target="${"_blank"}" href="${"https://www.linkedin.com/in/zari-mcfadden-45262978/"}"><img class="${"icon-image svelte-1gygnwc"}" src="${"https://i.ibb.co/wrVVYTH/linkedin.png"}" alt="${"linkedin"}" border="${"0"}"></a>
-    <a class="${"image-link svelte-1gygnwc"}" target="${"_blank"}" href="${"https://github.com/zarim"}"><img class="${"icon-image svelte-1gygnwc"}" src="${"https://i.ibb.co/yqchxF6/github.png"}" alt="${"github"}" border="${"0"}"></a>
-    <a class="${"image-link svelte-1gygnwc"}" target="${"_blank"}" href="${"https://twitter.com/ZariMcFadden"}"><img class="${"icon-image svelte-1gygnwc"}" src="${"https://i.ibb.co/ssN6MZ5/twitter.png"}" alt="${"twitter"}" border="${"0"}"></a></div>
-<div class="${"intro-container svelte-1gygnwc"}">${validate_component(Intro, "Intro").$$render($$result, {}, {}, {})}
-    <img class="${"zari svelte-1gygnwc"}"${add_attribute("src", src, 0)} alt="${"zari"}"> 
+<a href="${"mailto:zmuhammad55@gmail.com"}" class="${"link-block svelte-es1kr1"}"><p class="${"email svelte-es1kr1"}">Email me!</p></a>
+<div class="${"social-media svelte-es1kr1"}"><a class="${"image-link svelte-es1kr1"}" target="${"_blank"}" href="${"https://www.linkedin.com/in/zari-mcfadden-45262978/"}"><img class="${"icon-image svelte-es1kr1"}" src="${"https://i.ibb.co/wrVVYTH/linkedin.png"}" alt="${"linkedin"}" border="${"0"}"></a>
+    <a class="${"image-link svelte-es1kr1"}" target="${"_blank"}" href="${"https://github.com/zarim"}"><img class="${"icon-image svelte-es1kr1"}" src="${"https://i.ibb.co/yqchxF6/github.png"}" alt="${"github"}" border="${"0"}"></a>
+    <a class="${"image-link svelte-es1kr1"}" target="${"_blank"}" href="${"https://twitter.com/ZariMcFadden"}"><img class="${"icon-image svelte-es1kr1"}" src="${"https://i.ibb.co/ssN6MZ5/twitter.png"}" alt="${"twitter"}" border="${"0"}"></a></div>
+<div class="${"intro-container svelte-es1kr1"}">${validate_component(Intro, "Intro").$$render($$result, {}, {}, {})}
+    <img class="${"zari svelte-es1kr1"}"${add_attribute("src", src, 0)} alt="${"zari"}"> 
 </div>`;
     });
   }
@@ -5934,7 +5941,7 @@ var init_index_svelte = __esm({
   }
 });
 
-// .svelte-kit/output/server/nodes/12.js
+// .svelte-kit/output/server/nodes/13.js
 var __exports3 = {};
 __export(__exports3, {
   css: () => css7,
@@ -5945,12 +5952,12 @@ __export(__exports3, {
 });
 var index3, entry3, js3, css7;
 var init__3 = __esm({
-  ".svelte-kit/output/server/nodes/12.js"() {
+  ".svelte-kit/output/server/nodes/13.js"() {
     init_index_svelte();
-    index3 = 12;
-    entry3 = "pages/index.svelte-4f699a5d.js";
-    js3 = ["pages/index.svelte-4f699a5d.js", "chunks/index-613948cd.js", "pages/About.svelte-4d8f51a5.js", "pages/Intro.svelte-f5bd915e.js", "pages/Header.svelte-64e06afe.js", "pages/Menu.svelte-68177f87.js"];
-    css7 = ["assets/pages/About.svelte-deffacd3.css", "assets/pages/Intro.svelte-d9b27cbe.css", "assets/pages/Header.svelte-4055f18e.css", "assets/pages/Menu.svelte-4eb8d690.css"];
+    index3 = 13;
+    entry3 = "pages/index.svelte-595e5ee8.js";
+    js3 = ["pages/index.svelte-595e5ee8.js", "chunks/index-613948cd.js", "pages/About.svelte-2673e9b8.js", "pages/Intro.svelte-79385b4f.js", "pages/Header.svelte-0e37a812.js", "pages/Menu.svelte-449b402f.js"];
+    css7 = ["assets/pages/About.svelte-6cb9dc91.css", "assets/pages/Intro.svelte-d9b27cbe.css", "assets/pages/Header.svelte-4055f18e.css", "assets/pages/Menu.svelte-4a22c4ac.css"];
   }
 });
 
@@ -5968,9 +5975,9 @@ var init__4 = __esm({
   ".svelte-kit/output/server/nodes/2.js"() {
     init_About_svelte();
     index4 = 2;
-    entry4 = "pages/About.svelte-4d8f51a5.js";
-    js4 = ["pages/About.svelte-4d8f51a5.js", "chunks/index-613948cd.js", "pages/Intro.svelte-f5bd915e.js", "pages/Header.svelte-64e06afe.js", "pages/Menu.svelte-68177f87.js"];
-    css8 = ["assets/pages/About.svelte-deffacd3.css", "assets/pages/Intro.svelte-d9b27cbe.css", "assets/pages/Header.svelte-4055f18e.css", "assets/pages/Menu.svelte-4eb8d690.css"];
+    entry4 = "pages/About.svelte-2673e9b8.js";
+    js4 = ["pages/About.svelte-2673e9b8.js", "chunks/index-613948cd.js", "pages/Intro.svelte-79385b4f.js", "pages/Header.svelte-0e37a812.js", "pages/Menu.svelte-449b402f.js"];
+    css8 = ["assets/pages/About.svelte-6cb9dc91.css", "assets/pages/Intro.svelte-d9b27cbe.css", "assets/pages/Header.svelte-4055f18e.css", "assets/pages/Menu.svelte-4a22c4ac.css"];
   }
 });
 
@@ -5988,9 +5995,9 @@ var init__5 = __esm({
   ".svelte-kit/output/server/nodes/3.js"() {
     init_Header_svelte();
     index5 = 3;
-    entry5 = "pages/Header.svelte-64e06afe.js";
-    js5 = ["pages/Header.svelte-64e06afe.js", "chunks/index-613948cd.js", "pages/Menu.svelte-68177f87.js"];
-    css9 = ["assets/pages/Header.svelte-4055f18e.css", "assets/pages/Menu.svelte-4eb8d690.css"];
+    entry5 = "pages/Header.svelte-0e37a812.js";
+    js5 = ["pages/Header.svelte-0e37a812.js", "chunks/index-613948cd.js", "pages/Menu.svelte-449b402f.js"];
+    css9 = ["assets/pages/Header.svelte-4055f18e.css", "assets/pages/Menu.svelte-4a22c4ac.css"];
   }
 });
 
@@ -6008,8 +6015,8 @@ var init__6 = __esm({
   ".svelte-kit/output/server/nodes/4.js"() {
     init_Intro_svelte();
     index6 = 4;
-    entry6 = "pages/Intro.svelte-f5bd915e.js";
-    js6 = ["pages/Intro.svelte-f5bd915e.js", "chunks/index-613948cd.js"];
+    entry6 = "pages/Intro.svelte-79385b4f.js";
+    js6 = ["pages/Intro.svelte-79385b4f.js", "chunks/index-613948cd.js"];
     css10 = ["assets/pages/Intro.svelte-d9b27cbe.css"];
   }
 });
@@ -6028,9 +6035,9 @@ var init__7 = __esm({
   ".svelte-kit/output/server/nodes/5.js"() {
     init_Menu_svelte();
     index7 = 5;
-    entry7 = "pages/Menu.svelte-68177f87.js";
-    js7 = ["pages/Menu.svelte-68177f87.js", "chunks/index-613948cd.js"];
-    css11 = ["assets/pages/Menu.svelte-4eb8d690.css"];
+    entry7 = "pages/Menu.svelte-449b402f.js";
+    js7 = ["pages/Menu.svelte-449b402f.js", "chunks/index-613948cd.js"];
+    css11 = ["assets/pages/Menu.svelte-4a22c4ac.css"];
   }
 });
 
@@ -6134,9 +6141,9 @@ var init__8 = __esm({
   ".svelte-kit/output/server/nodes/6.js"() {
     init_Resume_svelte();
     index8 = 6;
-    entry8 = "pages/Resume.svelte-21a01b31.js";
-    js8 = ["pages/Resume.svelte-21a01b31.js", "chunks/index-613948cd.js", "pages/Header.svelte-64e06afe.js", "pages/Menu.svelte-68177f87.js"];
-    css13 = ["assets/pages/Resume.svelte-2424f16a.css", "assets/pages/Header.svelte-4055f18e.css", "assets/pages/Menu.svelte-4eb8d690.css"];
+    entry8 = "pages/Resume.svelte-313b41bd.js";
+    js8 = ["pages/Resume.svelte-313b41bd.js", "chunks/index-613948cd.js", "pages/Header.svelte-0e37a812.js", "pages/Menu.svelte-449b402f.js"];
+    css13 = ["assets/pages/Resume.svelte-2424f16a.css", "assets/pages/Header.svelte-4055f18e.css", "assets/pages/Menu.svelte-4a22c4ac.css"];
   }
 });
 
@@ -6270,9 +6277,9 @@ var init__9 = __esm({
   ".svelte-kit/output/server/nodes/7.js"() {
     init_WebWork_svelte();
     index9 = 7;
-    entry9 = "pages/WebWork.svelte-cb7c3232.js";
-    js9 = ["pages/WebWork.svelte-cb7c3232.js", "chunks/index-613948cd.js", "pages/Header.svelte-64e06afe.js", "pages/Menu.svelte-68177f87.js", "pages/WorkItem.svelte-ea0cf982.js", "pages/WorkMenu.svelte-6e6b5979.js"];
-    css17 = ["assets/pages/WebWork.svelte-52de711d.css", "assets/pages/Header.svelte-4055f18e.css", "assets/pages/Menu.svelte-4eb8d690.css", "assets/pages/WorkItem.svelte-b7e8ec1c.css", "assets/pages/WorkMenu.svelte-3a881f10.css"];
+    entry9 = "pages/WebWork.svelte-f70b1c3b.js";
+    js9 = ["pages/WebWork.svelte-f70b1c3b.js", "chunks/index-613948cd.js", "pages/Header.svelte-0e37a812.js", "pages/Menu.svelte-449b402f.js", "pages/WorkItem.svelte-ea0cf982.js", "pages/WorkMenu.svelte-6e6b5979.js"];
+    css17 = ["assets/pages/WebWork.svelte-52de711d.css", "assets/pages/Header.svelte-4055f18e.css", "assets/pages/Menu.svelte-4a22c4ac.css", "assets/pages/WorkItem.svelte-b7e8ec1c.css", "assets/pages/WorkMenu.svelte-3a881f10.css"];
   }
 });
 
@@ -6352,9 +6359,9 @@ var init__10 = __esm({
   ".svelte-kit/output/server/nodes/8.js"() {
     init_Work_svelte();
     index10 = 8;
-    entry10 = "pages/Work.svelte-597707dc.js";
-    js10 = ["pages/Work.svelte-597707dc.js", "chunks/index-613948cd.js", "pages/Header.svelte-64e06afe.js", "pages/Menu.svelte-68177f87.js", "pages/WorkItem.svelte-ea0cf982.js", "pages/WorkMenu.svelte-6e6b5979.js"];
-    css19 = ["assets/pages/Work.svelte-f28308a4.css", "assets/pages/Header.svelte-4055f18e.css", "assets/pages/Menu.svelte-4eb8d690.css", "assets/pages/WorkItem.svelte-b7e8ec1c.css", "assets/pages/WorkMenu.svelte-3a881f10.css"];
+    entry10 = "pages/Work.svelte-e760e8b3.js";
+    js10 = ["pages/Work.svelte-e760e8b3.js", "chunks/index-613948cd.js", "pages/Header.svelte-0e37a812.js", "pages/Menu.svelte-449b402f.js", "pages/WorkItem.svelte-ea0cf982.js", "pages/WorkMenu.svelte-6e6b5979.js"];
+    css19 = ["assets/pages/iOSWork.svelte-dc654aae.css", "assets/pages/Header.svelte-4055f18e.css", "assets/pages/Menu.svelte-4a22c4ac.css", "assets/pages/WorkItem.svelte-b7e8ec1c.css", "assets/pages/WorkMenu.svelte-3a881f10.css"];
   }
 });
 
@@ -6398,18 +6405,84 @@ var init__12 = __esm({
   }
 });
 
+// .svelte-kit/output/server/entries/pages/Writings.svelte.js
+var Writings_svelte_exports = {};
+__export(Writings_svelte_exports, {
+  default: () => Writings,
+  load: () => load5
+});
+async function load5({ fetch: fetch3 }) {
+  const resWriting = await fetch3("/todos/writing");
+  const jsonResWriting = await resWriting.json();
+  if (jsonResWriting.writingItems.length == 0) {
+    jsonResWriting.writingItems = [];
+  }
+  return {
+    props: { writings: jsonResWriting.writingItems }
+  };
+}
+var css22, Writings;
+var init_Writings_svelte = __esm({
+  ".svelte-kit/output/server/entries/pages/Writings.svelte.js"() {
+    init_index_59524ad9();
+    init_Header_svelte();
+    init_Menu_svelte();
+    css22 = {
+      code: ".writings-container.svelte-1t455io{margin:auto;width:50%;display:flex;flex-direction:column;padding-top:56px}#title-style.svelte-1t455io{font-weight:400}.section-content.svelte-1t455io{margin:2% 0;font-size:16px;line-height:24px;font-weight:200;font-family:'Maison mono', sans-serif;color:rgba(0, 0, 0, 0.9);text-decoration:none}",
+      map: null
+    };
+    Writings = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      const prerender = true;
+      let { writings } = $$props;
+      console.log(writings);
+      if ($$props.prerender === void 0 && $$bindings.prerender && prerender !== void 0)
+        $$bindings.prerender(prerender);
+      if ($$props.writings === void 0 && $$bindings.writings && writings !== void 0)
+        $$bindings.writings(writings);
+      $$result.css.add(css22);
+      return `${$$result.head += `${$$result.title = `<title>Writings</title>`, ""}`, ""}
+${validate_component(Header, "Header").$$render($$result, { page: "writings" }, {}, {})}
+
+<div class="${"writings-container svelte-1t455io"}">${writings.length > 0 ? `${each(writings, (w) => {
+        return `<a class="${"section-content svelte-1t455io"}" target="${"_blank"}"${add_attribute("href", w.link, 0)}>${escape(w.author)}. <span id="${"title-style"}" class="${"svelte-1t455io"}">&quot;${escape(w.title)}.&quot;</span> ${escape(w.year)}.</a>`;
+      })}` : ``}
+</div>`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/11.js
+var __exports13 = {};
+__export(__exports13, {
+  css: () => css23,
+  entry: () => entry13,
+  index: () => index13,
+  js: () => js13,
+  module: () => Writings_svelte_exports
+});
+var index13, entry13, js13, css23;
+var init__13 = __esm({
+  ".svelte-kit/output/server/nodes/11.js"() {
+    init_Writings_svelte();
+    index13 = 11;
+    entry13 = "pages/Writings.svelte-0fffdf2f.js";
+    js13 = ["pages/Writings.svelte-0fffdf2f.js", "chunks/index-613948cd.js", "pages/Header.svelte-0e37a812.js", "pages/Menu.svelte-449b402f.js"];
+    css23 = ["assets/pages/Writings.svelte-e5c9021d.css", "assets/pages/Header.svelte-4055f18e.css", "assets/pages/Menu.svelte-4a22c4ac.css"];
+  }
+});
+
 // .svelte-kit/output/server/entries/pages/iOSWork.svelte.js
 var iOSWork_svelte_exports = {};
 __export(iOSWork_svelte_exports, {
   default: () => IOSWork,
-  load: () => load5
+  load: () => load6
 });
-async function load5({ fetch: fetch3 }) {
+async function load6({ fetch: fetch3 }) {
   const res = await fetch3("/todos/project");
   const jsonRes = await res.json();
   return { props: { ios: jsonRes.iosItems } };
 }
-var css22, IOSWork;
+var css24, IOSWork;
 var init_iOSWork_svelte = __esm({
   ".svelte-kit/output/server/entries/pages/iOSWork.svelte.js"() {
     init_index_59524ad9();
@@ -6417,7 +6490,7 @@ var init_iOSWork_svelte = __esm({
     init_WorkItem_svelte();
     init_WorkMenu_svelte();
     init_Menu_svelte();
-    css22 = {
+    css24 = {
       code: ".work-container.svelte-c5kli{display:flex;flex-flow:row wrap;justify-content:center;overflow:hidden}.work.svelte-c5kli{display:contents}",
       map: null
     };
@@ -6428,7 +6501,7 @@ var init_iOSWork_svelte = __esm({
         $$bindings.prerender(prerender);
       if ($$props.ios === void 0 && $$bindings.ios && ios !== void 0)
         $$bindings.ios(ios);
-      $$result.css.add(css22);
+      $$result.css.add(css24);
       return `${$$result.head += `${$$result.title = `<title>iOS Work</title>`, ""}`, ""}
 
 ${validate_component(Header, "Header").$$render($$result, { page: "work" }, {}, {})}
@@ -6442,23 +6515,23 @@ ${each(ios, (i2) => {
   }
 });
 
-// .svelte-kit/output/server/nodes/11.js
-var __exports13 = {};
-__export(__exports13, {
-  css: () => css23,
-  entry: () => entry13,
-  index: () => index13,
-  js: () => js13,
+// .svelte-kit/output/server/nodes/12.js
+var __exports14 = {};
+__export(__exports14, {
+  css: () => css25,
+  entry: () => entry14,
+  index: () => index14,
+  js: () => js14,
   module: () => iOSWork_svelte_exports
 });
-var index13, entry13, js13, css23;
-var init__13 = __esm({
-  ".svelte-kit/output/server/nodes/11.js"() {
+var index14, entry14, js14, css25;
+var init__14 = __esm({
+  ".svelte-kit/output/server/nodes/12.js"() {
     init_iOSWork_svelte();
-    index13 = 11;
-    entry13 = "pages/iOSWork.svelte-81c948b3.js";
-    js13 = ["pages/iOSWork.svelte-81c948b3.js", "chunks/index-613948cd.js", "pages/Header.svelte-64e06afe.js", "pages/Menu.svelte-68177f87.js", "pages/WorkItem.svelte-ea0cf982.js", "pages/WorkMenu.svelte-6e6b5979.js"];
-    css23 = ["assets/pages/Work.svelte-f28308a4.css", "assets/pages/Header.svelte-4055f18e.css", "assets/pages/Menu.svelte-4eb8d690.css", "assets/pages/WorkItem.svelte-b7e8ec1c.css", "assets/pages/WorkMenu.svelte-3a881f10.css"];
+    index14 = 12;
+    entry14 = "pages/iOSWork.svelte-84ee8b2b.js";
+    js14 = ["pages/iOSWork.svelte-84ee8b2b.js", "chunks/index-613948cd.js", "pages/Header.svelte-0e37a812.js", "pages/Menu.svelte-449b402f.js", "pages/WorkItem.svelte-ea0cf982.js", "pages/WorkMenu.svelte-6e6b5979.js"];
+    css25 = ["assets/pages/iOSWork.svelte-dc654aae.css", "assets/pages/Header.svelte-4055f18e.css", "assets/pages/Menu.svelte-4a22c4ac.css", "assets/pages/WorkItem.svelte-b7e8ec1c.css", "assets/pages/WorkMenu.svelte-3a881f10.css"];
   }
 });
 
@@ -8500,7 +8573,7 @@ var require_decimal128 = __commonJS({
         var significandHigh = new long_1.Long(0, 0);
         var significandLow = new long_1.Long(0, 0);
         var biasedExponent = 0;
-        var index14 = 0;
+        var index15 = 0;
         if (representation.length >= 7e3) {
           throw new error_1.BSONTypeError("" + representation + " not a valid Decimal128 string");
         }
@@ -8523,31 +8596,31 @@ var require_decimal128 = __commonJS({
             invalidErr(representation, "missing e before exponent");
           }
         }
-        if (representation[index14] === "+" || representation[index14] === "-") {
-          isNegative = representation[index14++] === "-";
+        if (representation[index15] === "+" || representation[index15] === "-") {
+          isNegative = representation[index15++] === "-";
         }
-        if (!isDigit(representation[index14]) && representation[index14] !== ".") {
-          if (representation[index14] === "i" || representation[index14] === "I") {
+        if (!isDigit(representation[index15]) && representation[index15] !== ".") {
+          if (representation[index15] === "i" || representation[index15] === "I") {
             return new Decimal1282(buffer_1.Buffer.from(isNegative ? INF_NEGATIVE_BUFFER : INF_POSITIVE_BUFFER));
-          } else if (representation[index14] === "N") {
+          } else if (representation[index15] === "N") {
             return new Decimal1282(buffer_1.Buffer.from(NAN_BUFFER));
           }
         }
-        while (isDigit(representation[index14]) || representation[index14] === ".") {
-          if (representation[index14] === ".") {
+        while (isDigit(representation[index15]) || representation[index15] === ".") {
+          if (representation[index15] === ".") {
             if (sawRadix)
               invalidErr(representation, "contains multiple periods");
             sawRadix = true;
-            index14 = index14 + 1;
+            index15 = index15 + 1;
             continue;
           }
           if (nDigitsStored < 34) {
-            if (representation[index14] !== "0" || foundNonZero) {
+            if (representation[index15] !== "0" || foundNonZero) {
               if (!foundNonZero) {
                 firstNonZero = nDigitsRead;
               }
               foundNonZero = true;
-              digits[digitsInsert++] = parseInt(representation[index14], 10);
+              digits[digitsInsert++] = parseInt(representation[index15], 10);
               nDigitsStored = nDigitsStored + 1;
             }
           }
@@ -8556,18 +8629,18 @@ var require_decimal128 = __commonJS({
           if (sawRadix)
             radixPosition = radixPosition + 1;
           nDigitsRead = nDigitsRead + 1;
-          index14 = index14 + 1;
+          index15 = index15 + 1;
         }
         if (sawRadix && !nDigitsRead)
           throw new error_1.BSONTypeError("" + representation + " not a valid Decimal128 string");
-        if (representation[index14] === "e" || representation[index14] === "E") {
-          var match = representation.substr(++index14).match(EXPONENT_REGEX);
+        if (representation[index15] === "e" || representation[index15] === "E") {
+          var match = representation.substr(++index15).match(EXPONENT_REGEX);
           if (!match || !match[2])
             return new Decimal1282(buffer_1.Buffer.from(NAN_BUFFER));
           exponent = parseInt(match[0], 10);
-          index14 = index14 + match[0].length;
+          index15 = index15 + match[0].length;
         }
-        if (representation[index14])
+        if (representation[index15])
           return new Decimal1282(buffer_1.Buffer.from(NAN_BUFFER));
         firstDigit = 0;
         if (!nDigitsStored) {
@@ -8712,23 +8785,23 @@ var require_decimal128 = __commonJS({
           dec.high = dec.high.or(long_1.Long.fromString("9223372036854775808"));
         }
         var buffer = buffer_1.Buffer.alloc(16);
-        index14 = 0;
-        buffer[index14++] = dec.low.low & 255;
-        buffer[index14++] = dec.low.low >> 8 & 255;
-        buffer[index14++] = dec.low.low >> 16 & 255;
-        buffer[index14++] = dec.low.low >> 24 & 255;
-        buffer[index14++] = dec.low.high & 255;
-        buffer[index14++] = dec.low.high >> 8 & 255;
-        buffer[index14++] = dec.low.high >> 16 & 255;
-        buffer[index14++] = dec.low.high >> 24 & 255;
-        buffer[index14++] = dec.high.low & 255;
-        buffer[index14++] = dec.high.low >> 8 & 255;
-        buffer[index14++] = dec.high.low >> 16 & 255;
-        buffer[index14++] = dec.high.low >> 24 & 255;
-        buffer[index14++] = dec.high.high & 255;
-        buffer[index14++] = dec.high.high >> 8 & 255;
-        buffer[index14++] = dec.high.high >> 16 & 255;
-        buffer[index14++] = dec.high.high >> 24 & 255;
+        index15 = 0;
+        buffer[index15++] = dec.low.low & 255;
+        buffer[index15++] = dec.low.low >> 8 & 255;
+        buffer[index15++] = dec.low.low >> 16 & 255;
+        buffer[index15++] = dec.low.low >> 24 & 255;
+        buffer[index15++] = dec.low.high & 255;
+        buffer[index15++] = dec.low.high >> 8 & 255;
+        buffer[index15++] = dec.low.high >> 16 & 255;
+        buffer[index15++] = dec.low.high >> 24 & 255;
+        buffer[index15++] = dec.high.low & 255;
+        buffer[index15++] = dec.high.low >> 8 & 255;
+        buffer[index15++] = dec.high.low >> 16 & 255;
+        buffer[index15++] = dec.high.low >> 24 & 255;
+        buffer[index15++] = dec.high.high & 255;
+        buffer[index15++] = dec.high.high >> 8 & 255;
+        buffer[index15++] = dec.high.high >> 16 & 255;
+        buffer[index15++] = dec.high.high >> 24 & 255;
         return new Decimal1282(buffer);
       };
       Decimal1282.prototype.toString = function() {
@@ -8737,19 +8810,19 @@ var require_decimal128 = __commonJS({
         var significand = new Array(36);
         for (var i2 = 0; i2 < significand.length; i2++)
           significand[i2] = 0;
-        var index14 = 0;
+        var index15 = 0;
         var is_zero = false;
         var significand_msb;
         var significand128 = { parts: [0, 0, 0, 0] };
         var j, k;
         var string = [];
-        index14 = 0;
+        index15 = 0;
         var buffer = this.bytes;
-        var low = buffer[index14++] | buffer[index14++] << 8 | buffer[index14++] << 16 | buffer[index14++] << 24;
-        var midl = buffer[index14++] | buffer[index14++] << 8 | buffer[index14++] << 16 | buffer[index14++] << 24;
-        var midh = buffer[index14++] | buffer[index14++] << 8 | buffer[index14++] << 16 | buffer[index14++] << 24;
-        var high = buffer[index14++] | buffer[index14++] << 8 | buffer[index14++] << 16 | buffer[index14++] << 24;
-        index14 = 0;
+        var low = buffer[index15++] | buffer[index15++] << 8 | buffer[index15++] << 16 | buffer[index15++] << 24;
+        var midl = buffer[index15++] | buffer[index15++] << 8 | buffer[index15++] << 16 | buffer[index15++] << 24;
+        var midh = buffer[index15++] | buffer[index15++] << 8 | buffer[index15++] << 16 | buffer[index15++] << 24;
+        var high = buffer[index15++] | buffer[index15++] << 8 | buffer[index15++] << 16 | buffer[index15++] << 24;
+        index15 = 0;
         var dec = {
           low: new long_1.Long(low, midl),
           high: new long_1.Long(midh, high)
@@ -8794,12 +8867,12 @@ var require_decimal128 = __commonJS({
         }
         if (is_zero) {
           significand_digits = 1;
-          significand[index14] = 0;
+          significand[index15] = 0;
         } else {
           significand_digits = 36;
-          while (!significand[index14]) {
+          while (!significand[index15]) {
             significand_digits = significand_digits - 1;
-            index14 = index14 + 1;
+            index15 = index15 + 1;
           }
         }
         var scientific_exponent = significand_digits - 1 + exponent;
@@ -8812,13 +8885,13 @@ var require_decimal128 = __commonJS({
               string.push("E" + exponent);
             return string.join("");
           }
-          string.push("" + significand[index14++]);
+          string.push("" + significand[index15++]);
           significand_digits = significand_digits - 1;
           if (significand_digits) {
             string.push(".");
           }
           for (var i2 = 0; i2 < significand_digits; i2++) {
-            string.push("" + significand[index14++]);
+            string.push("" + significand[index15++]);
           }
           string.push("E");
           if (scientific_exponent > 0) {
@@ -8829,13 +8902,13 @@ var require_decimal128 = __commonJS({
         } else {
           if (exponent >= 0) {
             for (var i2 = 0; i2 < significand_digits; i2++) {
-              string.push("" + significand[index14++]);
+              string.push("" + significand[index15++]);
             }
           } else {
             var radix_position = significand_digits + exponent;
             if (radix_position > 0) {
               for (var i2 = 0; i2 < radix_position; i2++) {
-                string.push("" + significand[index14++]);
+                string.push("" + significand[index15++]);
               }
             } else {
               string.push("0");
@@ -8845,7 +8918,7 @@ var require_decimal128 = __commonJS({
               string.push("0");
             }
             for (var i2 = 0; i2 < significand_digits - Math.max(radix_position - 1, 0); i2++) {
-              string.push("" + significand[index14++]);
+              string.push("" + significand[index15++]);
             }
           }
         }
@@ -9553,8 +9626,8 @@ var require_extended_json = __commonJS({
       return value;
     }
     function serializeArray(array2, options2) {
-      return array2.map(function(v, index14) {
-        options2.seenObjects.push({ propertyName: "index " + index14, obj: null });
+      return array2.map(function(v, index15) {
+        options2.seenObjects.push({ propertyName: "index " + index15, obj: null });
         try {
           return serializeValue(v, options2);
         } finally {
@@ -9568,18 +9641,18 @@ var require_extended_json = __commonJS({
     }
     function serializeValue(value, options2) {
       if ((typeof value === "object" || typeof value === "function") && value !== null) {
-        var index14 = options2.seenObjects.findIndex(function(entry14) {
-          return entry14.obj === value;
+        var index15 = options2.seenObjects.findIndex(function(entry15) {
+          return entry15.obj === value;
         });
-        if (index14 !== -1) {
-          var props = options2.seenObjects.map(function(entry14) {
-            return entry14.propertyName;
+        if (index15 !== -1) {
+          var props = options2.seenObjects.map(function(entry15) {
+            return entry15.propertyName;
           });
-          var leadingPart = props.slice(0, index14).map(function(prop) {
+          var leadingPart = props.slice(0, index15).map(function(prop) {
             return prop + " -> ";
           }).join("");
-          var alreadySeen = props[index14];
-          var circularPart = " -> " + props.slice(index14 + 1, props.length - 1).map(function(prop) {
+          var alreadySeen = props[index15];
+          var circularPart = " -> " + props.slice(index15 + 1, props.length - 1).map(function(prop) {
             return prop + " -> ";
           }).join("");
           var current = props[props.length - 1];
@@ -9777,9 +9850,9 @@ var require_map = __commonJS({
           for (var i2 = 0; i2 < array2.length; i2++) {
             if (array2[i2] == null)
               continue;
-            var entry14 = array2[i2];
-            var key2 = entry14[0];
-            var value = entry14[1];
+            var entry15 = array2[i2];
+            var key2 = entry15[0];
+            var value = entry15[1];
             this._keys.push(key2);
             this._values[key2] = { v: value, i: this._keys.length - 1 };
           }
@@ -9798,10 +9871,10 @@ var require_map = __commonJS({
         };
         Map2.prototype.entries = function() {
           var _this = this;
-          var index14 = 0;
+          var index15 = 0;
           return {
             next: function() {
-              var key2 = _this._keys[index14++];
+              var key2 = _this._keys[index15++];
               return {
                 value: key2 !== void 0 ? [key2, _this._values[key2].v] : void 0,
                 done: key2 !== void 0 ? false : true
@@ -9824,10 +9897,10 @@ var require_map = __commonJS({
         };
         Map2.prototype.keys = function() {
           var _this = this;
-          var index14 = 0;
+          var index15 = 0;
           return {
             next: function() {
-              var key2 = _this._keys[index14++];
+              var key2 = _this._keys[index15++];
               return {
                 value: key2 !== void 0 ? key2 : void 0,
                 done: key2 !== void 0 ? false : true
@@ -9846,10 +9919,10 @@ var require_map = __commonJS({
         };
         Map2.prototype.values = function() {
           var _this = this;
-          var index14 = 0;
+          var index15 = 0;
           return {
             next: function() {
-              var key2 = _this._keys[index14++];
+              var key2 = _this._keys[index15++];
               return {
                 value: key2 !== void 0 ? _this._values[key2].v : void 0,
                 done: key2 !== void 0 ? false : true
@@ -10115,8 +10188,8 @@ var require_deserializer = __commonJS({
     var functionCache = {};
     function deserialize(buffer, options2, isArray) {
       options2 = options2 == null ? {} : options2;
-      var index14 = options2 && options2.index ? options2.index : 0;
-      var size = buffer[index14] | buffer[index14 + 1] << 8 | buffer[index14 + 2] << 16 | buffer[index14 + 3] << 24;
+      var index15 = options2 && options2.index ? options2.index : 0;
+      var size = buffer[index15] | buffer[index15 + 1] << 8 | buffer[index15 + 2] << 16 | buffer[index15 + 3] << 24;
       if (size < 5) {
         throw new error_1.BSONError("bson size must be >= 5, is " + size);
       }
@@ -10126,17 +10199,17 @@ var require_deserializer = __commonJS({
       if (!options2.allowObjectSmallerThanBufferSize && buffer.length !== size) {
         throw new error_1.BSONError("buffer length " + buffer.length + " must === bson size " + size);
       }
-      if (size + index14 > buffer.byteLength) {
-        throw new error_1.BSONError("(bson size " + size + " + options.index " + index14 + " must be <= buffer length " + buffer.byteLength + ")");
+      if (size + index15 > buffer.byteLength) {
+        throw new error_1.BSONError("(bson size " + size + " + options.index " + index15 + " must be <= buffer length " + buffer.byteLength + ")");
       }
-      if (buffer[index14 + size - 1] !== 0) {
+      if (buffer[index15 + size - 1] !== 0) {
         throw new error_1.BSONError("One object, sized correctly, with a spot for an EOO, but the EOO isn't 0x00");
       }
-      return deserializeObject(buffer, index14, options2, isArray);
+      return deserializeObject(buffer, index15, options2, isArray);
     }
     exports.deserialize = deserialize;
     var allowedDBRefKeys = /^\$ref$|^\$id$|^\$db$/;
-    function deserializeObject(buffer, index14, options2, isArray) {
+    function deserializeObject(buffer, index15, options2, isArray) {
       if (isArray === void 0) {
         isArray = false;
       }
@@ -10179,10 +10252,10 @@ var require_deserializer = __commonJS({
           utf8KeysSet.add(key2);
         }
       }
-      var startIndex = index14;
+      var startIndex = index15;
       if (buffer.length < 5)
         throw new error_1.BSONError("corrupt bson message < 5 bytes long");
-      var size = buffer[index14++] | buffer[index14++] << 8 | buffer[index14++] << 16 | buffer[index14++] << 24;
+      var size = buffer[index15++] | buffer[index15++] << 8 | buffer[index15++] << 16 | buffer[index15++] << 24;
       if (size < 5 || size > buffer.length)
         throw new error_1.BSONError("corrupt bson message");
       var object = isArray ? [] : {};
@@ -10190,16 +10263,16 @@ var require_deserializer = __commonJS({
       var done = false;
       var isPossibleDBRef = isArray ? false : null;
       while (!done) {
-        var elementType = buffer[index14++];
+        var elementType = buffer[index15++];
         if (elementType === 0)
           break;
-        var i2 = index14;
+        var i2 = index15;
         while (buffer[i2] !== 0 && i2 < buffer.length) {
           i2++;
         }
         if (i2 >= buffer.byteLength)
           throw new error_1.BSONError("Bad BSON Document: illegal CString");
-        var name = isArray ? arrayIndex++ : buffer.toString("utf8", index14, i2);
+        var name = isArray ? arrayIndex++ : buffer.toString("utf8", index15, i2);
         var shouldValidateKey = true;
         if (globalUTFValidation || utf8KeysSet.has(name)) {
           shouldValidateKey = validationSetting;
@@ -10210,44 +10283,44 @@ var require_deserializer = __commonJS({
           isPossibleDBRef = allowedDBRefKeys.test(name);
         }
         var value = void 0;
-        index14 = i2 + 1;
+        index15 = i2 + 1;
         if (elementType === constants.BSON_DATA_STRING) {
-          var stringSize = buffer[index14++] | buffer[index14++] << 8 | buffer[index14++] << 16 | buffer[index14++] << 24;
-          if (stringSize <= 0 || stringSize > buffer.length - index14 || buffer[index14 + stringSize - 1] !== 0) {
+          var stringSize = buffer[index15++] | buffer[index15++] << 8 | buffer[index15++] << 16 | buffer[index15++] << 24;
+          if (stringSize <= 0 || stringSize > buffer.length - index15 || buffer[index15 + stringSize - 1] !== 0) {
             throw new error_1.BSONError("bad string length in bson");
           }
-          value = getValidatedString(buffer, index14, index14 + stringSize - 1, shouldValidateKey);
-          index14 = index14 + stringSize;
+          value = getValidatedString(buffer, index15, index15 + stringSize - 1, shouldValidateKey);
+          index15 = index15 + stringSize;
         } else if (elementType === constants.BSON_DATA_OID) {
           var oid = buffer_1.Buffer.alloc(12);
-          buffer.copy(oid, 0, index14, index14 + 12);
+          buffer.copy(oid, 0, index15, index15 + 12);
           value = new objectid_1.ObjectId(oid);
-          index14 = index14 + 12;
+          index15 = index15 + 12;
         } else if (elementType === constants.BSON_DATA_INT && promoteValues === false) {
-          value = new int_32_1.Int32(buffer[index14++] | buffer[index14++] << 8 | buffer[index14++] << 16 | buffer[index14++] << 24);
+          value = new int_32_1.Int32(buffer[index15++] | buffer[index15++] << 8 | buffer[index15++] << 16 | buffer[index15++] << 24);
         } else if (elementType === constants.BSON_DATA_INT) {
-          value = buffer[index14++] | buffer[index14++] << 8 | buffer[index14++] << 16 | buffer[index14++] << 24;
+          value = buffer[index15++] | buffer[index15++] << 8 | buffer[index15++] << 16 | buffer[index15++] << 24;
         } else if (elementType === constants.BSON_DATA_NUMBER && promoteValues === false) {
-          value = new double_1.Double(buffer.readDoubleLE(index14));
-          index14 = index14 + 8;
+          value = new double_1.Double(buffer.readDoubleLE(index15));
+          index15 = index15 + 8;
         } else if (elementType === constants.BSON_DATA_NUMBER) {
-          value = buffer.readDoubleLE(index14);
-          index14 = index14 + 8;
+          value = buffer.readDoubleLE(index15);
+          index15 = index15 + 8;
         } else if (elementType === constants.BSON_DATA_DATE) {
-          var lowBits = buffer[index14++] | buffer[index14++] << 8 | buffer[index14++] << 16 | buffer[index14++] << 24;
-          var highBits = buffer[index14++] | buffer[index14++] << 8 | buffer[index14++] << 16 | buffer[index14++] << 24;
+          var lowBits = buffer[index15++] | buffer[index15++] << 8 | buffer[index15++] << 16 | buffer[index15++] << 24;
+          var highBits = buffer[index15++] | buffer[index15++] << 8 | buffer[index15++] << 16 | buffer[index15++] << 24;
           value = new Date(new long_1.Long(lowBits, highBits).toNumber());
         } else if (elementType === constants.BSON_DATA_BOOLEAN) {
-          if (buffer[index14] !== 0 && buffer[index14] !== 1)
+          if (buffer[index15] !== 0 && buffer[index15] !== 1)
             throw new error_1.BSONError("illegal boolean type value");
-          value = buffer[index14++] === 1;
+          value = buffer[index15++] === 1;
         } else if (elementType === constants.BSON_DATA_OBJECT) {
-          var _index = index14;
-          var objectSize = buffer[index14] | buffer[index14 + 1] << 8 | buffer[index14 + 2] << 16 | buffer[index14 + 3] << 24;
-          if (objectSize <= 0 || objectSize > buffer.length - index14)
+          var _index = index15;
+          var objectSize = buffer[index15] | buffer[index15 + 1] << 8 | buffer[index15 + 2] << 16 | buffer[index15 + 3] << 24;
+          if (objectSize <= 0 || objectSize > buffer.length - index15)
             throw new error_1.BSONError("bad embedded document length in bson");
           if (raw) {
-            value = buffer.slice(index14, index14 + objectSize);
+            value = buffer.slice(index15, index15 + objectSize);
           } else {
             var objectOptions = options2;
             if (!globalUTFValidation) {
@@ -10255,12 +10328,12 @@ var require_deserializer = __commonJS({
             }
             value = deserializeObject(buffer, _index, objectOptions, false);
           }
-          index14 = index14 + objectSize;
+          index15 = index15 + objectSize;
         } else if (elementType === constants.BSON_DATA_ARRAY) {
-          var _index = index14;
-          var objectSize = buffer[index14] | buffer[index14 + 1] << 8 | buffer[index14 + 2] << 16 | buffer[index14 + 3] << 24;
+          var _index = index15;
+          var objectSize = buffer[index15] | buffer[index15 + 1] << 8 | buffer[index15 + 2] << 16 | buffer[index15 + 3] << 24;
           var arrayOptions = options2;
-          var stopIndex = index14 + objectSize;
+          var stopIndex = index15 + objectSize;
           if (fieldsAsRaw && fieldsAsRaw[name]) {
             arrayOptions = {};
             for (var n in options2) {
@@ -10272,18 +10345,18 @@ var require_deserializer = __commonJS({
             arrayOptions = __assign(__assign({}, arrayOptions), { validation: { utf8: shouldValidateKey } });
           }
           value = deserializeObject(buffer, _index, arrayOptions, true);
-          index14 = index14 + objectSize;
-          if (buffer[index14 - 1] !== 0)
+          index15 = index15 + objectSize;
+          if (buffer[index15 - 1] !== 0)
             throw new error_1.BSONError("invalid array terminator byte");
-          if (index14 !== stopIndex)
+          if (index15 !== stopIndex)
             throw new error_1.BSONError("corrupted array bson");
         } else if (elementType === constants.BSON_DATA_UNDEFINED) {
           value = void 0;
         } else if (elementType === constants.BSON_DATA_NULL) {
           value = null;
         } else if (elementType === constants.BSON_DATA_LONG) {
-          var lowBits = buffer[index14++] | buffer[index14++] << 8 | buffer[index14++] << 16 | buffer[index14++] << 24;
-          var highBits = buffer[index14++] | buffer[index14++] << 8 | buffer[index14++] << 16 | buffer[index14++] << 24;
+          var lowBits = buffer[index15++] | buffer[index15++] << 8 | buffer[index15++] << 16 | buffer[index15++] << 24;
+          var highBits = buffer[index15++] | buffer[index15++] << 8 | buffer[index15++] << 16 | buffer[index15++] << 24;
           var long = new long_1.Long(lowBits, highBits);
           if (promoteLongs && promoteValues === true) {
             value = long.lessThanOrEqual(JS_INT_MAX_LONG) && long.greaterThanOrEqual(JS_INT_MIN_LONG) ? long.toNumber() : long;
@@ -10292,8 +10365,8 @@ var require_deserializer = __commonJS({
           }
         } else if (elementType === constants.BSON_DATA_DECIMAL128) {
           var bytes = buffer_1.Buffer.alloc(16);
-          buffer.copy(bytes, 0, index14, index14 + 16);
-          index14 = index14 + 16;
+          buffer.copy(bytes, 0, index15, index15 + 16);
+          index15 = index15 + 16;
           var decimal128 = new decimal128_1.Decimal128(bytes);
           if ("toObject" in decimal128 && typeof decimal128.toObject === "function") {
             value = decimal128.toObject();
@@ -10301,16 +10374,16 @@ var require_deserializer = __commonJS({
             value = decimal128;
           }
         } else if (elementType === constants.BSON_DATA_BINARY) {
-          var binarySize = buffer[index14++] | buffer[index14++] << 8 | buffer[index14++] << 16 | buffer[index14++] << 24;
+          var binarySize = buffer[index15++] | buffer[index15++] << 8 | buffer[index15++] << 16 | buffer[index15++] << 24;
           var totalBinarySize = binarySize;
-          var subType = buffer[index14++];
+          var subType = buffer[index15++];
           if (binarySize < 0)
             throw new error_1.BSONError("Negative binary type element size found");
           if (binarySize > buffer.byteLength)
             throw new error_1.BSONError("Binary type size larger than document size");
           if (buffer["slice"] != null) {
             if (subType === binary_1.Binary.SUBTYPE_BYTE_ARRAY) {
-              binarySize = buffer[index14++] | buffer[index14++] << 8 | buffer[index14++] << 16 | buffer[index14++] << 24;
+              binarySize = buffer[index15++] | buffer[index15++] << 8 | buffer[index15++] << 16 | buffer[index15++] << 24;
               if (binarySize < 0)
                 throw new error_1.BSONError("Negative binary type element size found for subtype 0x02");
               if (binarySize > totalBinarySize - 4)
@@ -10319,14 +10392,14 @@ var require_deserializer = __commonJS({
                 throw new error_1.BSONError("Binary type with subtype 0x02 contains too short binary size");
             }
             if (promoteBuffers && promoteValues) {
-              value = buffer.slice(index14, index14 + binarySize);
+              value = buffer.slice(index15, index15 + binarySize);
             } else {
-              value = new binary_1.Binary(buffer.slice(index14, index14 + binarySize), subType);
+              value = new binary_1.Binary(buffer.slice(index15, index15 + binarySize), subType);
             }
           } else {
             var _buffer = buffer_1.Buffer.alloc(binarySize);
             if (subType === binary_1.Binary.SUBTYPE_BYTE_ARRAY) {
-              binarySize = buffer[index14++] | buffer[index14++] << 8 | buffer[index14++] << 16 | buffer[index14++] << 24;
+              binarySize = buffer[index15++] | buffer[index15++] << 8 | buffer[index15++] << 16 | buffer[index15++] << 24;
               if (binarySize < 0)
                 throw new error_1.BSONError("Negative binary type element size found for subtype 0x02");
               if (binarySize > totalBinarySize - 4)
@@ -10335,7 +10408,7 @@ var require_deserializer = __commonJS({
                 throw new error_1.BSONError("Binary type with subtype 0x02 contains too short binary size");
             }
             for (i2 = 0; i2 < binarySize; i2++) {
-              _buffer[i2] = buffer[index14 + i2];
+              _buffer[i2] = buffer[index15 + i2];
             }
             if (promoteBuffers && promoteValues) {
               value = _buffer;
@@ -10343,24 +10416,24 @@ var require_deserializer = __commonJS({
               value = new binary_1.Binary(_buffer, subType);
             }
           }
-          index14 = index14 + binarySize;
+          index15 = index15 + binarySize;
         } else if (elementType === constants.BSON_DATA_REGEXP && bsonRegExp === false) {
-          i2 = index14;
+          i2 = index15;
           while (buffer[i2] !== 0 && i2 < buffer.length) {
             i2++;
           }
           if (i2 >= buffer.length)
             throw new error_1.BSONError("Bad BSON Document: illegal CString");
-          var source = buffer.toString("utf8", index14, i2);
-          index14 = i2 + 1;
-          i2 = index14;
+          var source = buffer.toString("utf8", index15, i2);
+          index15 = i2 + 1;
+          i2 = index15;
           while (buffer[i2] !== 0 && i2 < buffer.length) {
             i2++;
           }
           if (i2 >= buffer.length)
             throw new error_1.BSONError("Bad BSON Document: illegal CString");
-          var regExpOptions = buffer.toString("utf8", index14, i2);
-          index14 = i2 + 1;
+          var regExpOptions = buffer.toString("utf8", index15, i2);
+          index15 = i2 + 1;
           var optionsArray = new Array(regExpOptions.length);
           for (i2 = 0; i2 < regExpOptions.length; i2++) {
             switch (regExpOptions[i2]) {
@@ -10377,45 +10450,45 @@ var require_deserializer = __commonJS({
           }
           value = new RegExp(source, optionsArray.join(""));
         } else if (elementType === constants.BSON_DATA_REGEXP && bsonRegExp === true) {
-          i2 = index14;
+          i2 = index15;
           while (buffer[i2] !== 0 && i2 < buffer.length) {
             i2++;
           }
           if (i2 >= buffer.length)
             throw new error_1.BSONError("Bad BSON Document: illegal CString");
-          var source = buffer.toString("utf8", index14, i2);
-          index14 = i2 + 1;
-          i2 = index14;
+          var source = buffer.toString("utf8", index15, i2);
+          index15 = i2 + 1;
+          i2 = index15;
           while (buffer[i2] !== 0 && i2 < buffer.length) {
             i2++;
           }
           if (i2 >= buffer.length)
             throw new error_1.BSONError("Bad BSON Document: illegal CString");
-          var regExpOptions = buffer.toString("utf8", index14, i2);
-          index14 = i2 + 1;
+          var regExpOptions = buffer.toString("utf8", index15, i2);
+          index15 = i2 + 1;
           value = new regexp_1.BSONRegExp(source, regExpOptions);
         } else if (elementType === constants.BSON_DATA_SYMBOL) {
-          var stringSize = buffer[index14++] | buffer[index14++] << 8 | buffer[index14++] << 16 | buffer[index14++] << 24;
-          if (stringSize <= 0 || stringSize > buffer.length - index14 || buffer[index14 + stringSize - 1] !== 0) {
+          var stringSize = buffer[index15++] | buffer[index15++] << 8 | buffer[index15++] << 16 | buffer[index15++] << 24;
+          if (stringSize <= 0 || stringSize > buffer.length - index15 || buffer[index15 + stringSize - 1] !== 0) {
             throw new error_1.BSONError("bad string length in bson");
           }
-          var symbol = getValidatedString(buffer, index14, index14 + stringSize - 1, shouldValidateKey);
+          var symbol = getValidatedString(buffer, index15, index15 + stringSize - 1, shouldValidateKey);
           value = promoteValues ? symbol : new symbol_1.BSONSymbol(symbol);
-          index14 = index14 + stringSize;
+          index15 = index15 + stringSize;
         } else if (elementType === constants.BSON_DATA_TIMESTAMP) {
-          var lowBits = buffer[index14++] | buffer[index14++] << 8 | buffer[index14++] << 16 | buffer[index14++] << 24;
-          var highBits = buffer[index14++] | buffer[index14++] << 8 | buffer[index14++] << 16 | buffer[index14++] << 24;
+          var lowBits = buffer[index15++] | buffer[index15++] << 8 | buffer[index15++] << 16 | buffer[index15++] << 24;
+          var highBits = buffer[index15++] | buffer[index15++] << 8 | buffer[index15++] << 16 | buffer[index15++] << 24;
           value = new timestamp_1.Timestamp(lowBits, highBits);
         } else if (elementType === constants.BSON_DATA_MIN_KEY) {
           value = new min_key_1.MinKey();
         } else if (elementType === constants.BSON_DATA_MAX_KEY) {
           value = new max_key_1.MaxKey();
         } else if (elementType === constants.BSON_DATA_CODE) {
-          var stringSize = buffer[index14++] | buffer[index14++] << 8 | buffer[index14++] << 16 | buffer[index14++] << 24;
-          if (stringSize <= 0 || stringSize > buffer.length - index14 || buffer[index14 + stringSize - 1] !== 0) {
+          var stringSize = buffer[index15++] | buffer[index15++] << 8 | buffer[index15++] << 16 | buffer[index15++] << 24;
+          if (stringSize <= 0 || stringSize > buffer.length - index15 || buffer[index15 + stringSize - 1] !== 0) {
             throw new error_1.BSONError("bad string length in bson");
           }
-          var functionString = getValidatedString(buffer, index14, index14 + stringSize - 1, shouldValidateKey);
+          var functionString = getValidatedString(buffer, index15, index15 + stringSize - 1, shouldValidateKey);
           if (evalFunctions) {
             if (cacheFunctions) {
               value = isolateEval(functionString, functionCache, object);
@@ -10425,22 +10498,22 @@ var require_deserializer = __commonJS({
           } else {
             value = new code_1.Code(functionString);
           }
-          index14 = index14 + stringSize;
+          index15 = index15 + stringSize;
         } else if (elementType === constants.BSON_DATA_CODE_W_SCOPE) {
-          var totalSize = buffer[index14++] | buffer[index14++] << 8 | buffer[index14++] << 16 | buffer[index14++] << 24;
+          var totalSize = buffer[index15++] | buffer[index15++] << 8 | buffer[index15++] << 16 | buffer[index15++] << 24;
           if (totalSize < 4 + 4 + 4 + 1) {
             throw new error_1.BSONError("code_w_scope total size shorter minimum expected length");
           }
-          var stringSize = buffer[index14++] | buffer[index14++] << 8 | buffer[index14++] << 16 | buffer[index14++] << 24;
-          if (stringSize <= 0 || stringSize > buffer.length - index14 || buffer[index14 + stringSize - 1] !== 0) {
+          var stringSize = buffer[index15++] | buffer[index15++] << 8 | buffer[index15++] << 16 | buffer[index15++] << 24;
+          if (stringSize <= 0 || stringSize > buffer.length - index15 || buffer[index15 + stringSize - 1] !== 0) {
             throw new error_1.BSONError("bad string length in bson");
           }
-          var functionString = getValidatedString(buffer, index14, index14 + stringSize - 1, shouldValidateKey);
-          index14 = index14 + stringSize;
-          var _index = index14;
-          var objectSize = buffer[index14] | buffer[index14 + 1] << 8 | buffer[index14 + 2] << 16 | buffer[index14 + 3] << 24;
+          var functionString = getValidatedString(buffer, index15, index15 + stringSize - 1, shouldValidateKey);
+          index15 = index15 + stringSize;
+          var _index = index15;
+          var objectSize = buffer[index15] | buffer[index15 + 1] << 8 | buffer[index15 + 2] << 16 | buffer[index15 + 3] << 24;
           var scopeObject = deserializeObject(buffer, _index, options2, false);
-          index14 = index14 + objectSize;
+          index15 = index15 + objectSize;
           if (totalSize < 4 + 4 + objectSize + stringSize) {
             throw new error_1.BSONError("code_w_scope total size is too short, truncating scope");
           }
@@ -10458,20 +10531,20 @@ var require_deserializer = __commonJS({
             value = new code_1.Code(functionString, scopeObject);
           }
         } else if (elementType === constants.BSON_DATA_DBPOINTER) {
-          var stringSize = buffer[index14++] | buffer[index14++] << 8 | buffer[index14++] << 16 | buffer[index14++] << 24;
-          if (stringSize <= 0 || stringSize > buffer.length - index14 || buffer[index14 + stringSize - 1] !== 0)
+          var stringSize = buffer[index15++] | buffer[index15++] << 8 | buffer[index15++] << 16 | buffer[index15++] << 24;
+          if (stringSize <= 0 || stringSize > buffer.length - index15 || buffer[index15 + stringSize - 1] !== 0)
             throw new error_1.BSONError("bad string length in bson");
           if (validation != null && validation.utf8) {
-            if (!validate_utf8_1.validateUtf8(buffer, index14, index14 + stringSize - 1)) {
+            if (!validate_utf8_1.validateUtf8(buffer, index15, index15 + stringSize - 1)) {
               throw new error_1.BSONError("Invalid UTF-8 string in BSON document");
             }
           }
-          var namespace = buffer.toString("utf8", index14, index14 + stringSize - 1);
-          index14 = index14 + stringSize;
+          var namespace = buffer.toString("utf8", index15, index15 + stringSize - 1);
+          index15 = index15 + stringSize;
           var oidBuffer = buffer_1.Buffer.alloc(12);
-          buffer.copy(oidBuffer, 0, index14, index14 + 12);
+          buffer.copy(oidBuffer, 0, index15, index15 + 12);
           var oid = new objectid_1.ObjectId(oidBuffer);
-          index14 = index14 + 12;
+          index15 = index15 + 12;
           value = new db_ref_1.DBRef(namespace, oid);
         } else {
           throw new error_1.BSONError("Detected unknown BSON type " + elementType.toString(16) + ' for fieldname "' + name + '"');
@@ -10487,7 +10560,7 @@ var require_deserializer = __commonJS({
           object[name] = value;
         }
       }
-      if (size !== index14 - startIndex) {
+      if (size !== index15 - startIndex) {
         if (isArray)
           throw new error_1.BSONError("corrupt array bson");
         throw new error_1.BSONError("corrupt object bson");
@@ -10650,149 +10723,149 @@ var require_serializer = __commonJS({
     var utils_1 = require_utils();
     var regexp = /\x00/;
     var ignoreKeys = /* @__PURE__ */ new Set(["$db", "$ref", "$id", "$clusterTime"]);
-    function serializeString(buffer, key2, value, index14, isArray) {
-      buffer[index14++] = constants.BSON_DATA_STRING;
-      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index14, void 0, "utf8") : buffer.write(key2, index14, void 0, "ascii");
-      index14 = index14 + numberOfWrittenBytes + 1;
-      buffer[index14 - 1] = 0;
-      var size = buffer.write(value, index14 + 4, void 0, "utf8");
-      buffer[index14 + 3] = size + 1 >> 24 & 255;
-      buffer[index14 + 2] = size + 1 >> 16 & 255;
-      buffer[index14 + 1] = size + 1 >> 8 & 255;
-      buffer[index14] = size + 1 & 255;
-      index14 = index14 + 4 + size;
-      buffer[index14++] = 0;
-      return index14;
+    function serializeString(buffer, key2, value, index15, isArray) {
+      buffer[index15++] = constants.BSON_DATA_STRING;
+      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index15, void 0, "utf8") : buffer.write(key2, index15, void 0, "ascii");
+      index15 = index15 + numberOfWrittenBytes + 1;
+      buffer[index15 - 1] = 0;
+      var size = buffer.write(value, index15 + 4, void 0, "utf8");
+      buffer[index15 + 3] = size + 1 >> 24 & 255;
+      buffer[index15 + 2] = size + 1 >> 16 & 255;
+      buffer[index15 + 1] = size + 1 >> 8 & 255;
+      buffer[index15] = size + 1 & 255;
+      index15 = index15 + 4 + size;
+      buffer[index15++] = 0;
+      return index15;
     }
-    function serializeNumber(buffer, key2, value, index14, isArray) {
+    function serializeNumber(buffer, key2, value, index15, isArray) {
       if (Number.isInteger(value) && value >= constants.BSON_INT32_MIN && value <= constants.BSON_INT32_MAX) {
-        buffer[index14++] = constants.BSON_DATA_INT;
-        var numberOfWrittenBytes = !isArray ? buffer.write(key2, index14, void 0, "utf8") : buffer.write(key2, index14, void 0, "ascii");
-        index14 = index14 + numberOfWrittenBytes;
-        buffer[index14++] = 0;
-        buffer[index14++] = value & 255;
-        buffer[index14++] = value >> 8 & 255;
-        buffer[index14++] = value >> 16 & 255;
-        buffer[index14++] = value >> 24 & 255;
+        buffer[index15++] = constants.BSON_DATA_INT;
+        var numberOfWrittenBytes = !isArray ? buffer.write(key2, index15, void 0, "utf8") : buffer.write(key2, index15, void 0, "ascii");
+        index15 = index15 + numberOfWrittenBytes;
+        buffer[index15++] = 0;
+        buffer[index15++] = value & 255;
+        buffer[index15++] = value >> 8 & 255;
+        buffer[index15++] = value >> 16 & 255;
+        buffer[index15++] = value >> 24 & 255;
       } else {
-        buffer[index14++] = constants.BSON_DATA_NUMBER;
-        var numberOfWrittenBytes = !isArray ? buffer.write(key2, index14, void 0, "utf8") : buffer.write(key2, index14, void 0, "ascii");
-        index14 = index14 + numberOfWrittenBytes;
-        buffer[index14++] = 0;
-        float_parser_1.writeIEEE754(buffer, value, index14, "little", 52, 8);
-        index14 = index14 + 8;
+        buffer[index15++] = constants.BSON_DATA_NUMBER;
+        var numberOfWrittenBytes = !isArray ? buffer.write(key2, index15, void 0, "utf8") : buffer.write(key2, index15, void 0, "ascii");
+        index15 = index15 + numberOfWrittenBytes;
+        buffer[index15++] = 0;
+        float_parser_1.writeIEEE754(buffer, value, index15, "little", 52, 8);
+        index15 = index15 + 8;
       }
-      return index14;
+      return index15;
     }
-    function serializeNull(buffer, key2, _, index14, isArray) {
-      buffer[index14++] = constants.BSON_DATA_NULL;
-      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index14, void 0, "utf8") : buffer.write(key2, index14, void 0, "ascii");
-      index14 = index14 + numberOfWrittenBytes;
-      buffer[index14++] = 0;
-      return index14;
+    function serializeNull(buffer, key2, _, index15, isArray) {
+      buffer[index15++] = constants.BSON_DATA_NULL;
+      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index15, void 0, "utf8") : buffer.write(key2, index15, void 0, "ascii");
+      index15 = index15 + numberOfWrittenBytes;
+      buffer[index15++] = 0;
+      return index15;
     }
-    function serializeBoolean(buffer, key2, value, index14, isArray) {
-      buffer[index14++] = constants.BSON_DATA_BOOLEAN;
-      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index14, void 0, "utf8") : buffer.write(key2, index14, void 0, "ascii");
-      index14 = index14 + numberOfWrittenBytes;
-      buffer[index14++] = 0;
-      buffer[index14++] = value ? 1 : 0;
-      return index14;
+    function serializeBoolean(buffer, key2, value, index15, isArray) {
+      buffer[index15++] = constants.BSON_DATA_BOOLEAN;
+      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index15, void 0, "utf8") : buffer.write(key2, index15, void 0, "ascii");
+      index15 = index15 + numberOfWrittenBytes;
+      buffer[index15++] = 0;
+      buffer[index15++] = value ? 1 : 0;
+      return index15;
     }
-    function serializeDate(buffer, key2, value, index14, isArray) {
-      buffer[index14++] = constants.BSON_DATA_DATE;
-      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index14, void 0, "utf8") : buffer.write(key2, index14, void 0, "ascii");
-      index14 = index14 + numberOfWrittenBytes;
-      buffer[index14++] = 0;
+    function serializeDate(buffer, key2, value, index15, isArray) {
+      buffer[index15++] = constants.BSON_DATA_DATE;
+      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index15, void 0, "utf8") : buffer.write(key2, index15, void 0, "ascii");
+      index15 = index15 + numberOfWrittenBytes;
+      buffer[index15++] = 0;
       var dateInMilis = long_1.Long.fromNumber(value.getTime());
       var lowBits = dateInMilis.getLowBits();
       var highBits = dateInMilis.getHighBits();
-      buffer[index14++] = lowBits & 255;
-      buffer[index14++] = lowBits >> 8 & 255;
-      buffer[index14++] = lowBits >> 16 & 255;
-      buffer[index14++] = lowBits >> 24 & 255;
-      buffer[index14++] = highBits & 255;
-      buffer[index14++] = highBits >> 8 & 255;
-      buffer[index14++] = highBits >> 16 & 255;
-      buffer[index14++] = highBits >> 24 & 255;
-      return index14;
+      buffer[index15++] = lowBits & 255;
+      buffer[index15++] = lowBits >> 8 & 255;
+      buffer[index15++] = lowBits >> 16 & 255;
+      buffer[index15++] = lowBits >> 24 & 255;
+      buffer[index15++] = highBits & 255;
+      buffer[index15++] = highBits >> 8 & 255;
+      buffer[index15++] = highBits >> 16 & 255;
+      buffer[index15++] = highBits >> 24 & 255;
+      return index15;
     }
-    function serializeRegExp(buffer, key2, value, index14, isArray) {
-      buffer[index14++] = constants.BSON_DATA_REGEXP;
-      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index14, void 0, "utf8") : buffer.write(key2, index14, void 0, "ascii");
-      index14 = index14 + numberOfWrittenBytes;
-      buffer[index14++] = 0;
+    function serializeRegExp(buffer, key2, value, index15, isArray) {
+      buffer[index15++] = constants.BSON_DATA_REGEXP;
+      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index15, void 0, "utf8") : buffer.write(key2, index15, void 0, "ascii");
+      index15 = index15 + numberOfWrittenBytes;
+      buffer[index15++] = 0;
       if (value.source && value.source.match(regexp) != null) {
         throw Error("value " + value.source + " must not contain null bytes");
       }
-      index14 = index14 + buffer.write(value.source, index14, void 0, "utf8");
-      buffer[index14++] = 0;
+      index15 = index15 + buffer.write(value.source, index15, void 0, "utf8");
+      buffer[index15++] = 0;
       if (value.ignoreCase)
-        buffer[index14++] = 105;
+        buffer[index15++] = 105;
       if (value.global)
-        buffer[index14++] = 115;
+        buffer[index15++] = 115;
       if (value.multiline)
-        buffer[index14++] = 109;
-      buffer[index14++] = 0;
-      return index14;
+        buffer[index15++] = 109;
+      buffer[index15++] = 0;
+      return index15;
     }
-    function serializeBSONRegExp(buffer, key2, value, index14, isArray) {
-      buffer[index14++] = constants.BSON_DATA_REGEXP;
-      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index14, void 0, "utf8") : buffer.write(key2, index14, void 0, "ascii");
-      index14 = index14 + numberOfWrittenBytes;
-      buffer[index14++] = 0;
+    function serializeBSONRegExp(buffer, key2, value, index15, isArray) {
+      buffer[index15++] = constants.BSON_DATA_REGEXP;
+      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index15, void 0, "utf8") : buffer.write(key2, index15, void 0, "ascii");
+      index15 = index15 + numberOfWrittenBytes;
+      buffer[index15++] = 0;
       if (value.pattern.match(regexp) != null) {
         throw Error("pattern " + value.pattern + " must not contain null bytes");
       }
-      index14 = index14 + buffer.write(value.pattern, index14, void 0, "utf8");
-      buffer[index14++] = 0;
-      index14 = index14 + buffer.write(value.options.split("").sort().join(""), index14, void 0, "utf8");
-      buffer[index14++] = 0;
-      return index14;
+      index15 = index15 + buffer.write(value.pattern, index15, void 0, "utf8");
+      buffer[index15++] = 0;
+      index15 = index15 + buffer.write(value.options.split("").sort().join(""), index15, void 0, "utf8");
+      buffer[index15++] = 0;
+      return index15;
     }
-    function serializeMinMax(buffer, key2, value, index14, isArray) {
+    function serializeMinMax(buffer, key2, value, index15, isArray) {
       if (value === null) {
-        buffer[index14++] = constants.BSON_DATA_NULL;
+        buffer[index15++] = constants.BSON_DATA_NULL;
       } else if (value._bsontype === "MinKey") {
-        buffer[index14++] = constants.BSON_DATA_MIN_KEY;
+        buffer[index15++] = constants.BSON_DATA_MIN_KEY;
       } else {
-        buffer[index14++] = constants.BSON_DATA_MAX_KEY;
+        buffer[index15++] = constants.BSON_DATA_MAX_KEY;
       }
-      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index14, void 0, "utf8") : buffer.write(key2, index14, void 0, "ascii");
-      index14 = index14 + numberOfWrittenBytes;
-      buffer[index14++] = 0;
-      return index14;
+      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index15, void 0, "utf8") : buffer.write(key2, index15, void 0, "ascii");
+      index15 = index15 + numberOfWrittenBytes;
+      buffer[index15++] = 0;
+      return index15;
     }
-    function serializeObjectId(buffer, key2, value, index14, isArray) {
-      buffer[index14++] = constants.BSON_DATA_OID;
-      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index14, void 0, "utf8") : buffer.write(key2, index14, void 0, "ascii");
-      index14 = index14 + numberOfWrittenBytes;
-      buffer[index14++] = 0;
+    function serializeObjectId(buffer, key2, value, index15, isArray) {
+      buffer[index15++] = constants.BSON_DATA_OID;
+      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index15, void 0, "utf8") : buffer.write(key2, index15, void 0, "ascii");
+      index15 = index15 + numberOfWrittenBytes;
+      buffer[index15++] = 0;
       if (typeof value.id === "string") {
-        buffer.write(value.id, index14, void 0, "binary");
+        buffer.write(value.id, index15, void 0, "binary");
       } else if (utils_1.isUint8Array(value.id)) {
-        buffer.set(value.id.subarray(0, 12), index14);
+        buffer.set(value.id.subarray(0, 12), index15);
       } else {
         throw new error_1.BSONTypeError("object [" + JSON.stringify(value) + "] is not a valid ObjectId");
       }
-      return index14 + 12;
+      return index15 + 12;
     }
-    function serializeBuffer(buffer, key2, value, index14, isArray) {
-      buffer[index14++] = constants.BSON_DATA_BINARY;
-      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index14, void 0, "utf8") : buffer.write(key2, index14, void 0, "ascii");
-      index14 = index14 + numberOfWrittenBytes;
-      buffer[index14++] = 0;
+    function serializeBuffer(buffer, key2, value, index15, isArray) {
+      buffer[index15++] = constants.BSON_DATA_BINARY;
+      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index15, void 0, "utf8") : buffer.write(key2, index15, void 0, "ascii");
+      index15 = index15 + numberOfWrittenBytes;
+      buffer[index15++] = 0;
       var size = value.length;
-      buffer[index14++] = size & 255;
-      buffer[index14++] = size >> 8 & 255;
-      buffer[index14++] = size >> 16 & 255;
-      buffer[index14++] = size >> 24 & 255;
-      buffer[index14++] = constants.BSON_BINARY_SUBTYPE_DEFAULT;
-      buffer.set(ensure_buffer_1.ensureBuffer(value), index14);
-      index14 = index14 + size;
-      return index14;
+      buffer[index15++] = size & 255;
+      buffer[index15++] = size >> 8 & 255;
+      buffer[index15++] = size >> 16 & 255;
+      buffer[index15++] = size >> 24 & 255;
+      buffer[index15++] = constants.BSON_BINARY_SUBTYPE_DEFAULT;
+      buffer.set(ensure_buffer_1.ensureBuffer(value), index15);
+      index15 = index15 + size;
+      return index15;
     }
-    function serializeObject(buffer, key2, value, index14, checkKeys, depth, serializeFunctions, ignoreUndefined, isArray, path) {
+    function serializeObject(buffer, key2, value, index15, checkKeys, depth, serializeFunctions, ignoreUndefined, isArray, path) {
       if (checkKeys === void 0) {
         checkKeys = false;
       }
@@ -10816,82 +10889,82 @@ var require_serializer = __commonJS({
           throw new error_1.BSONError("cyclic dependency detected");
       }
       path.push(value);
-      buffer[index14++] = Array.isArray(value) ? constants.BSON_DATA_ARRAY : constants.BSON_DATA_OBJECT;
-      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index14, void 0, "utf8") : buffer.write(key2, index14, void 0, "ascii");
-      index14 = index14 + numberOfWrittenBytes;
-      buffer[index14++] = 0;
-      var endIndex = serializeInto(buffer, value, checkKeys, index14, depth + 1, serializeFunctions, ignoreUndefined, path);
+      buffer[index15++] = Array.isArray(value) ? constants.BSON_DATA_ARRAY : constants.BSON_DATA_OBJECT;
+      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index15, void 0, "utf8") : buffer.write(key2, index15, void 0, "ascii");
+      index15 = index15 + numberOfWrittenBytes;
+      buffer[index15++] = 0;
+      var endIndex = serializeInto(buffer, value, checkKeys, index15, depth + 1, serializeFunctions, ignoreUndefined, path);
       path.pop();
       return endIndex;
     }
-    function serializeDecimal128(buffer, key2, value, index14, isArray) {
-      buffer[index14++] = constants.BSON_DATA_DECIMAL128;
-      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index14, void 0, "utf8") : buffer.write(key2, index14, void 0, "ascii");
-      index14 = index14 + numberOfWrittenBytes;
-      buffer[index14++] = 0;
-      buffer.set(value.bytes.subarray(0, 16), index14);
-      return index14 + 16;
+    function serializeDecimal128(buffer, key2, value, index15, isArray) {
+      buffer[index15++] = constants.BSON_DATA_DECIMAL128;
+      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index15, void 0, "utf8") : buffer.write(key2, index15, void 0, "ascii");
+      index15 = index15 + numberOfWrittenBytes;
+      buffer[index15++] = 0;
+      buffer.set(value.bytes.subarray(0, 16), index15);
+      return index15 + 16;
     }
-    function serializeLong(buffer, key2, value, index14, isArray) {
-      buffer[index14++] = value._bsontype === "Long" ? constants.BSON_DATA_LONG : constants.BSON_DATA_TIMESTAMP;
-      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index14, void 0, "utf8") : buffer.write(key2, index14, void 0, "ascii");
-      index14 = index14 + numberOfWrittenBytes;
-      buffer[index14++] = 0;
+    function serializeLong(buffer, key2, value, index15, isArray) {
+      buffer[index15++] = value._bsontype === "Long" ? constants.BSON_DATA_LONG : constants.BSON_DATA_TIMESTAMP;
+      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index15, void 0, "utf8") : buffer.write(key2, index15, void 0, "ascii");
+      index15 = index15 + numberOfWrittenBytes;
+      buffer[index15++] = 0;
       var lowBits = value.getLowBits();
       var highBits = value.getHighBits();
-      buffer[index14++] = lowBits & 255;
-      buffer[index14++] = lowBits >> 8 & 255;
-      buffer[index14++] = lowBits >> 16 & 255;
-      buffer[index14++] = lowBits >> 24 & 255;
-      buffer[index14++] = highBits & 255;
-      buffer[index14++] = highBits >> 8 & 255;
-      buffer[index14++] = highBits >> 16 & 255;
-      buffer[index14++] = highBits >> 24 & 255;
-      return index14;
+      buffer[index15++] = lowBits & 255;
+      buffer[index15++] = lowBits >> 8 & 255;
+      buffer[index15++] = lowBits >> 16 & 255;
+      buffer[index15++] = lowBits >> 24 & 255;
+      buffer[index15++] = highBits & 255;
+      buffer[index15++] = highBits >> 8 & 255;
+      buffer[index15++] = highBits >> 16 & 255;
+      buffer[index15++] = highBits >> 24 & 255;
+      return index15;
     }
-    function serializeInt32(buffer, key2, value, index14, isArray) {
+    function serializeInt32(buffer, key2, value, index15, isArray) {
       value = value.valueOf();
-      buffer[index14++] = constants.BSON_DATA_INT;
-      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index14, void 0, "utf8") : buffer.write(key2, index14, void 0, "ascii");
-      index14 = index14 + numberOfWrittenBytes;
-      buffer[index14++] = 0;
-      buffer[index14++] = value & 255;
-      buffer[index14++] = value >> 8 & 255;
-      buffer[index14++] = value >> 16 & 255;
-      buffer[index14++] = value >> 24 & 255;
-      return index14;
+      buffer[index15++] = constants.BSON_DATA_INT;
+      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index15, void 0, "utf8") : buffer.write(key2, index15, void 0, "ascii");
+      index15 = index15 + numberOfWrittenBytes;
+      buffer[index15++] = 0;
+      buffer[index15++] = value & 255;
+      buffer[index15++] = value >> 8 & 255;
+      buffer[index15++] = value >> 16 & 255;
+      buffer[index15++] = value >> 24 & 255;
+      return index15;
     }
-    function serializeDouble(buffer, key2, value, index14, isArray) {
-      buffer[index14++] = constants.BSON_DATA_NUMBER;
-      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index14, void 0, "utf8") : buffer.write(key2, index14, void 0, "ascii");
-      index14 = index14 + numberOfWrittenBytes;
-      buffer[index14++] = 0;
-      float_parser_1.writeIEEE754(buffer, value.value, index14, "little", 52, 8);
-      index14 = index14 + 8;
-      return index14;
+    function serializeDouble(buffer, key2, value, index15, isArray) {
+      buffer[index15++] = constants.BSON_DATA_NUMBER;
+      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index15, void 0, "utf8") : buffer.write(key2, index15, void 0, "ascii");
+      index15 = index15 + numberOfWrittenBytes;
+      buffer[index15++] = 0;
+      float_parser_1.writeIEEE754(buffer, value.value, index15, "little", 52, 8);
+      index15 = index15 + 8;
+      return index15;
     }
-    function serializeFunction(buffer, key2, value, index14, _checkKeys, _depth, isArray) {
+    function serializeFunction(buffer, key2, value, index15, _checkKeys, _depth, isArray) {
       if (_checkKeys === void 0) {
         _checkKeys = false;
       }
       if (_depth === void 0) {
         _depth = 0;
       }
-      buffer[index14++] = constants.BSON_DATA_CODE;
-      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index14, void 0, "utf8") : buffer.write(key2, index14, void 0, "ascii");
-      index14 = index14 + numberOfWrittenBytes;
-      buffer[index14++] = 0;
+      buffer[index15++] = constants.BSON_DATA_CODE;
+      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index15, void 0, "utf8") : buffer.write(key2, index15, void 0, "ascii");
+      index15 = index15 + numberOfWrittenBytes;
+      buffer[index15++] = 0;
       var functionString = utils_1.normalizedFunctionString(value);
-      var size = buffer.write(functionString, index14 + 4, void 0, "utf8") + 1;
-      buffer[index14] = size & 255;
-      buffer[index14 + 1] = size >> 8 & 255;
-      buffer[index14 + 2] = size >> 16 & 255;
-      buffer[index14 + 3] = size >> 24 & 255;
-      index14 = index14 + 4 + size - 1;
-      buffer[index14++] = 0;
-      return index14;
+      var size = buffer.write(functionString, index15 + 4, void 0, "utf8") + 1;
+      buffer[index15] = size & 255;
+      buffer[index15 + 1] = size >> 8 & 255;
+      buffer[index15 + 2] = size >> 16 & 255;
+      buffer[index15 + 3] = size >> 24 & 255;
+      index15 = index15 + 4 + size - 1;
+      buffer[index15++] = 0;
+      return index15;
     }
-    function serializeCode(buffer, key2, value, index14, checkKeys, depth, serializeFunctions, ignoreUndefined, isArray) {
+    function serializeCode(buffer, key2, value, index15, checkKeys, depth, serializeFunctions, ignoreUndefined, isArray) {
       if (checkKeys === void 0) {
         checkKeys = false;
       }
@@ -10908,89 +10981,89 @@ var require_serializer = __commonJS({
         isArray = false;
       }
       if (value.scope && typeof value.scope === "object") {
-        buffer[index14++] = constants.BSON_DATA_CODE_W_SCOPE;
-        var numberOfWrittenBytes = !isArray ? buffer.write(key2, index14, void 0, "utf8") : buffer.write(key2, index14, void 0, "ascii");
-        index14 = index14 + numberOfWrittenBytes;
-        buffer[index14++] = 0;
-        var startIndex = index14;
+        buffer[index15++] = constants.BSON_DATA_CODE_W_SCOPE;
+        var numberOfWrittenBytes = !isArray ? buffer.write(key2, index15, void 0, "utf8") : buffer.write(key2, index15, void 0, "ascii");
+        index15 = index15 + numberOfWrittenBytes;
+        buffer[index15++] = 0;
+        var startIndex = index15;
         var functionString = typeof value.code === "string" ? value.code : value.code.toString();
-        index14 = index14 + 4;
-        var codeSize = buffer.write(functionString, index14 + 4, void 0, "utf8") + 1;
-        buffer[index14] = codeSize & 255;
-        buffer[index14 + 1] = codeSize >> 8 & 255;
-        buffer[index14 + 2] = codeSize >> 16 & 255;
-        buffer[index14 + 3] = codeSize >> 24 & 255;
-        buffer[index14 + 4 + codeSize - 1] = 0;
-        index14 = index14 + codeSize + 4;
-        var endIndex = serializeInto(buffer, value.scope, checkKeys, index14, depth + 1, serializeFunctions, ignoreUndefined);
-        index14 = endIndex - 1;
+        index15 = index15 + 4;
+        var codeSize = buffer.write(functionString, index15 + 4, void 0, "utf8") + 1;
+        buffer[index15] = codeSize & 255;
+        buffer[index15 + 1] = codeSize >> 8 & 255;
+        buffer[index15 + 2] = codeSize >> 16 & 255;
+        buffer[index15 + 3] = codeSize >> 24 & 255;
+        buffer[index15 + 4 + codeSize - 1] = 0;
+        index15 = index15 + codeSize + 4;
+        var endIndex = serializeInto(buffer, value.scope, checkKeys, index15, depth + 1, serializeFunctions, ignoreUndefined);
+        index15 = endIndex - 1;
         var totalSize = endIndex - startIndex;
         buffer[startIndex++] = totalSize & 255;
         buffer[startIndex++] = totalSize >> 8 & 255;
         buffer[startIndex++] = totalSize >> 16 & 255;
         buffer[startIndex++] = totalSize >> 24 & 255;
-        buffer[index14++] = 0;
+        buffer[index15++] = 0;
       } else {
-        buffer[index14++] = constants.BSON_DATA_CODE;
-        var numberOfWrittenBytes = !isArray ? buffer.write(key2, index14, void 0, "utf8") : buffer.write(key2, index14, void 0, "ascii");
-        index14 = index14 + numberOfWrittenBytes;
-        buffer[index14++] = 0;
+        buffer[index15++] = constants.BSON_DATA_CODE;
+        var numberOfWrittenBytes = !isArray ? buffer.write(key2, index15, void 0, "utf8") : buffer.write(key2, index15, void 0, "ascii");
+        index15 = index15 + numberOfWrittenBytes;
+        buffer[index15++] = 0;
         var functionString = value.code.toString();
-        var size = buffer.write(functionString, index14 + 4, void 0, "utf8") + 1;
-        buffer[index14] = size & 255;
-        buffer[index14 + 1] = size >> 8 & 255;
-        buffer[index14 + 2] = size >> 16 & 255;
-        buffer[index14 + 3] = size >> 24 & 255;
-        index14 = index14 + 4 + size - 1;
-        buffer[index14++] = 0;
+        var size = buffer.write(functionString, index15 + 4, void 0, "utf8") + 1;
+        buffer[index15] = size & 255;
+        buffer[index15 + 1] = size >> 8 & 255;
+        buffer[index15 + 2] = size >> 16 & 255;
+        buffer[index15 + 3] = size >> 24 & 255;
+        index15 = index15 + 4 + size - 1;
+        buffer[index15++] = 0;
       }
-      return index14;
+      return index15;
     }
-    function serializeBinary(buffer, key2, value, index14, isArray) {
-      buffer[index14++] = constants.BSON_DATA_BINARY;
-      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index14, void 0, "utf8") : buffer.write(key2, index14, void 0, "ascii");
-      index14 = index14 + numberOfWrittenBytes;
-      buffer[index14++] = 0;
+    function serializeBinary(buffer, key2, value, index15, isArray) {
+      buffer[index15++] = constants.BSON_DATA_BINARY;
+      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index15, void 0, "utf8") : buffer.write(key2, index15, void 0, "ascii");
+      index15 = index15 + numberOfWrittenBytes;
+      buffer[index15++] = 0;
       var data = value.value(true);
       var size = value.position;
       if (value.sub_type === binary_1.Binary.SUBTYPE_BYTE_ARRAY)
         size = size + 4;
-      buffer[index14++] = size & 255;
-      buffer[index14++] = size >> 8 & 255;
-      buffer[index14++] = size >> 16 & 255;
-      buffer[index14++] = size >> 24 & 255;
-      buffer[index14++] = value.sub_type;
+      buffer[index15++] = size & 255;
+      buffer[index15++] = size >> 8 & 255;
+      buffer[index15++] = size >> 16 & 255;
+      buffer[index15++] = size >> 24 & 255;
+      buffer[index15++] = value.sub_type;
       if (value.sub_type === binary_1.Binary.SUBTYPE_BYTE_ARRAY) {
         size = size - 4;
-        buffer[index14++] = size & 255;
-        buffer[index14++] = size >> 8 & 255;
-        buffer[index14++] = size >> 16 & 255;
-        buffer[index14++] = size >> 24 & 255;
+        buffer[index15++] = size & 255;
+        buffer[index15++] = size >> 8 & 255;
+        buffer[index15++] = size >> 16 & 255;
+        buffer[index15++] = size >> 24 & 255;
       }
-      buffer.set(data, index14);
-      index14 = index14 + value.position;
-      return index14;
+      buffer.set(data, index15);
+      index15 = index15 + value.position;
+      return index15;
     }
-    function serializeSymbol(buffer, key2, value, index14, isArray) {
-      buffer[index14++] = constants.BSON_DATA_SYMBOL;
-      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index14, void 0, "utf8") : buffer.write(key2, index14, void 0, "ascii");
-      index14 = index14 + numberOfWrittenBytes;
-      buffer[index14++] = 0;
-      var size = buffer.write(value.value, index14 + 4, void 0, "utf8") + 1;
-      buffer[index14] = size & 255;
-      buffer[index14 + 1] = size >> 8 & 255;
-      buffer[index14 + 2] = size >> 16 & 255;
-      buffer[index14 + 3] = size >> 24 & 255;
-      index14 = index14 + 4 + size - 1;
-      buffer[index14++] = 0;
-      return index14;
+    function serializeSymbol(buffer, key2, value, index15, isArray) {
+      buffer[index15++] = constants.BSON_DATA_SYMBOL;
+      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index15, void 0, "utf8") : buffer.write(key2, index15, void 0, "ascii");
+      index15 = index15 + numberOfWrittenBytes;
+      buffer[index15++] = 0;
+      var size = buffer.write(value.value, index15 + 4, void 0, "utf8") + 1;
+      buffer[index15] = size & 255;
+      buffer[index15 + 1] = size >> 8 & 255;
+      buffer[index15 + 2] = size >> 16 & 255;
+      buffer[index15 + 3] = size >> 24 & 255;
+      index15 = index15 + 4 + size - 1;
+      buffer[index15++] = 0;
+      return index15;
     }
-    function serializeDBRef(buffer, key2, value, index14, depth, serializeFunctions, isArray) {
-      buffer[index14++] = constants.BSON_DATA_OBJECT;
-      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index14, void 0, "utf8") : buffer.write(key2, index14, void 0, "ascii");
-      index14 = index14 + numberOfWrittenBytes;
-      buffer[index14++] = 0;
-      var startIndex = index14;
+    function serializeDBRef(buffer, key2, value, index15, depth, serializeFunctions, isArray) {
+      buffer[index15++] = constants.BSON_DATA_OBJECT;
+      var numberOfWrittenBytes = !isArray ? buffer.write(key2, index15, void 0, "utf8") : buffer.write(key2, index15, void 0, "ascii");
+      index15 = index15 + numberOfWrittenBytes;
+      buffer[index15++] = 0;
+      var startIndex = index15;
       var output = {
         $ref: value.collection || value.namespace,
         $id: value.oid
@@ -10999,7 +11072,7 @@ var require_serializer = __commonJS({
         output.$db = value.db;
       }
       output = Object.assign(output, value.fields);
-      var endIndex = serializeInto(buffer, output, false, index14, depth + 1, serializeFunctions);
+      var endIndex = serializeInto(buffer, output, false, index15, depth + 1, serializeFunctions);
       var size = endIndex - startIndex;
       buffer[startIndex++] = size & 255;
       buffer[startIndex++] = size >> 8 & 255;
@@ -11029,7 +11102,7 @@ var require_serializer = __commonJS({
       startingIndex = startingIndex || 0;
       path = path || [];
       path.push(object);
-      var index14 = startingIndex + 4;
+      var index15 = startingIndex + 4;
       if (Array.isArray(object)) {
         for (var i2 = 0; i2 < object.length; i2++) {
           var key2 = "" + i2;
@@ -11038,49 +11111,49 @@ var require_serializer = __commonJS({
             value = value.toBSON();
           }
           if (typeof value === "string") {
-            index14 = serializeString(buffer, key2, value, index14, true);
+            index15 = serializeString(buffer, key2, value, index15, true);
           } else if (typeof value === "number") {
-            index14 = serializeNumber(buffer, key2, value, index14, true);
+            index15 = serializeNumber(buffer, key2, value, index15, true);
           } else if (typeof value === "bigint") {
             throw new error_1.BSONTypeError("Unsupported type BigInt, please use Decimal128");
           } else if (typeof value === "boolean") {
-            index14 = serializeBoolean(buffer, key2, value, index14, true);
+            index15 = serializeBoolean(buffer, key2, value, index15, true);
           } else if (value instanceof Date || utils_1.isDate(value)) {
-            index14 = serializeDate(buffer, key2, value, index14, true);
+            index15 = serializeDate(buffer, key2, value, index15, true);
           } else if (value === void 0) {
-            index14 = serializeNull(buffer, key2, value, index14, true);
+            index15 = serializeNull(buffer, key2, value, index15, true);
           } else if (value === null) {
-            index14 = serializeNull(buffer, key2, value, index14, true);
+            index15 = serializeNull(buffer, key2, value, index15, true);
           } else if (value["_bsontype"] === "ObjectId" || value["_bsontype"] === "ObjectID") {
-            index14 = serializeObjectId(buffer, key2, value, index14, true);
+            index15 = serializeObjectId(buffer, key2, value, index15, true);
           } else if (utils_1.isUint8Array(value)) {
-            index14 = serializeBuffer(buffer, key2, value, index14, true);
+            index15 = serializeBuffer(buffer, key2, value, index15, true);
           } else if (value instanceof RegExp || utils_1.isRegExp(value)) {
-            index14 = serializeRegExp(buffer, key2, value, index14, true);
+            index15 = serializeRegExp(buffer, key2, value, index15, true);
           } else if (typeof value === "object" && value["_bsontype"] == null) {
-            index14 = serializeObject(buffer, key2, value, index14, checkKeys, depth, serializeFunctions, ignoreUndefined, true, path);
+            index15 = serializeObject(buffer, key2, value, index15, checkKeys, depth, serializeFunctions, ignoreUndefined, true, path);
           } else if (typeof value === "object" && extended_json_1.isBSONType(value) && value._bsontype === "Decimal128") {
-            index14 = serializeDecimal128(buffer, key2, value, index14, true);
+            index15 = serializeDecimal128(buffer, key2, value, index15, true);
           } else if (value["_bsontype"] === "Long" || value["_bsontype"] === "Timestamp") {
-            index14 = serializeLong(buffer, key2, value, index14, true);
+            index15 = serializeLong(buffer, key2, value, index15, true);
           } else if (value["_bsontype"] === "Double") {
-            index14 = serializeDouble(buffer, key2, value, index14, true);
+            index15 = serializeDouble(buffer, key2, value, index15, true);
           } else if (typeof value === "function" && serializeFunctions) {
-            index14 = serializeFunction(buffer, key2, value, index14, checkKeys, depth, true);
+            index15 = serializeFunction(buffer, key2, value, index15, checkKeys, depth, true);
           } else if (value["_bsontype"] === "Code") {
-            index14 = serializeCode(buffer, key2, value, index14, checkKeys, depth, serializeFunctions, ignoreUndefined, true);
+            index15 = serializeCode(buffer, key2, value, index15, checkKeys, depth, serializeFunctions, ignoreUndefined, true);
           } else if (value["_bsontype"] === "Binary") {
-            index14 = serializeBinary(buffer, key2, value, index14, true);
+            index15 = serializeBinary(buffer, key2, value, index15, true);
           } else if (value["_bsontype"] === "Symbol") {
-            index14 = serializeSymbol(buffer, key2, value, index14, true);
+            index15 = serializeSymbol(buffer, key2, value, index15, true);
           } else if (value["_bsontype"] === "DBRef") {
-            index14 = serializeDBRef(buffer, key2, value, index14, depth, serializeFunctions, true);
+            index15 = serializeDBRef(buffer, key2, value, index15, depth, serializeFunctions, true);
           } else if (value["_bsontype"] === "BSONRegExp") {
-            index14 = serializeBSONRegExp(buffer, key2, value, index14, true);
+            index15 = serializeBSONRegExp(buffer, key2, value, index15, true);
           } else if (value["_bsontype"] === "Int32") {
-            index14 = serializeInt32(buffer, key2, value, index14, true);
+            index15 = serializeInt32(buffer, key2, value, index15, true);
           } else if (value["_bsontype"] === "MinKey" || value["_bsontype"] === "MaxKey") {
-            index14 = serializeMinMax(buffer, key2, value, index14, true);
+            index15 = serializeMinMax(buffer, key2, value, index15, true);
           } else if (typeof value["_bsontype"] !== "undefined") {
             throw new error_1.BSONTypeError("Unrecognized or invalid _bsontype: " + value["_bsontype"]);
           }
@@ -11089,12 +11162,12 @@ var require_serializer = __commonJS({
         var iterator = object.entries();
         var done = false;
         while (!done) {
-          var entry14 = iterator.next();
-          done = !!entry14.done;
+          var entry15 = iterator.next();
+          done = !!entry15.done;
           if (done)
             continue;
-          var key2 = entry14.value[0];
-          var value = entry14.value[1];
+          var key2 = entry15.value[0];
+          var value = entry15.value[1];
           var type = typeof value;
           if (typeof key2 === "string" && !ignoreKeys.has(key2)) {
             if (key2.match(regexp) != null) {
@@ -11109,47 +11182,47 @@ var require_serializer = __commonJS({
             }
           }
           if (type === "string") {
-            index14 = serializeString(buffer, key2, value, index14);
+            index15 = serializeString(buffer, key2, value, index15);
           } else if (type === "number") {
-            index14 = serializeNumber(buffer, key2, value, index14);
+            index15 = serializeNumber(buffer, key2, value, index15);
           } else if (type === "bigint" || utils_1.isBigInt64Array(value) || utils_1.isBigUInt64Array(value)) {
             throw new error_1.BSONTypeError("Unsupported type BigInt, please use Decimal128");
           } else if (type === "boolean") {
-            index14 = serializeBoolean(buffer, key2, value, index14);
+            index15 = serializeBoolean(buffer, key2, value, index15);
           } else if (value instanceof Date || utils_1.isDate(value)) {
-            index14 = serializeDate(buffer, key2, value, index14);
+            index15 = serializeDate(buffer, key2, value, index15);
           } else if (value === null || value === void 0 && ignoreUndefined === false) {
-            index14 = serializeNull(buffer, key2, value, index14);
+            index15 = serializeNull(buffer, key2, value, index15);
           } else if (value["_bsontype"] === "ObjectId" || value["_bsontype"] === "ObjectID") {
-            index14 = serializeObjectId(buffer, key2, value, index14);
+            index15 = serializeObjectId(buffer, key2, value, index15);
           } else if (utils_1.isUint8Array(value)) {
-            index14 = serializeBuffer(buffer, key2, value, index14);
+            index15 = serializeBuffer(buffer, key2, value, index15);
           } else if (value instanceof RegExp || utils_1.isRegExp(value)) {
-            index14 = serializeRegExp(buffer, key2, value, index14);
+            index15 = serializeRegExp(buffer, key2, value, index15);
           } else if (type === "object" && value["_bsontype"] == null) {
-            index14 = serializeObject(buffer, key2, value, index14, checkKeys, depth, serializeFunctions, ignoreUndefined, false, path);
+            index15 = serializeObject(buffer, key2, value, index15, checkKeys, depth, serializeFunctions, ignoreUndefined, false, path);
           } else if (type === "object" && value["_bsontype"] === "Decimal128") {
-            index14 = serializeDecimal128(buffer, key2, value, index14);
+            index15 = serializeDecimal128(buffer, key2, value, index15);
           } else if (value["_bsontype"] === "Long" || value["_bsontype"] === "Timestamp") {
-            index14 = serializeLong(buffer, key2, value, index14);
+            index15 = serializeLong(buffer, key2, value, index15);
           } else if (value["_bsontype"] === "Double") {
-            index14 = serializeDouble(buffer, key2, value, index14);
+            index15 = serializeDouble(buffer, key2, value, index15);
           } else if (value["_bsontype"] === "Code") {
-            index14 = serializeCode(buffer, key2, value, index14, checkKeys, depth, serializeFunctions, ignoreUndefined);
+            index15 = serializeCode(buffer, key2, value, index15, checkKeys, depth, serializeFunctions, ignoreUndefined);
           } else if (typeof value === "function" && serializeFunctions) {
-            index14 = serializeFunction(buffer, key2, value, index14, checkKeys, depth, serializeFunctions);
+            index15 = serializeFunction(buffer, key2, value, index15, checkKeys, depth, serializeFunctions);
           } else if (value["_bsontype"] === "Binary") {
-            index14 = serializeBinary(buffer, key2, value, index14);
+            index15 = serializeBinary(buffer, key2, value, index15);
           } else if (value["_bsontype"] === "Symbol") {
-            index14 = serializeSymbol(buffer, key2, value, index14);
+            index15 = serializeSymbol(buffer, key2, value, index15);
           } else if (value["_bsontype"] === "DBRef") {
-            index14 = serializeDBRef(buffer, key2, value, index14, depth, serializeFunctions);
+            index15 = serializeDBRef(buffer, key2, value, index15, depth, serializeFunctions);
           } else if (value["_bsontype"] === "BSONRegExp") {
-            index14 = serializeBSONRegExp(buffer, key2, value, index14);
+            index15 = serializeBSONRegExp(buffer, key2, value, index15);
           } else if (value["_bsontype"] === "Int32") {
-            index14 = serializeInt32(buffer, key2, value, index14);
+            index15 = serializeInt32(buffer, key2, value, index15);
           } else if (value["_bsontype"] === "MinKey" || value["_bsontype"] === "MaxKey") {
-            index14 = serializeMinMax(buffer, key2, value, index14);
+            index15 = serializeMinMax(buffer, key2, value, index15);
           } else if (typeof value["_bsontype"] !== "undefined") {
             throw new error_1.BSONTypeError("Unrecognized or invalid _bsontype: " + value["_bsontype"]);
           }
@@ -11180,63 +11253,63 @@ var require_serializer = __commonJS({
             }
           }
           if (type === "string") {
-            index14 = serializeString(buffer, key2, value, index14);
+            index15 = serializeString(buffer, key2, value, index15);
           } else if (type === "number") {
-            index14 = serializeNumber(buffer, key2, value, index14);
+            index15 = serializeNumber(buffer, key2, value, index15);
           } else if (type === "bigint") {
             throw new error_1.BSONTypeError("Unsupported type BigInt, please use Decimal128");
           } else if (type === "boolean") {
-            index14 = serializeBoolean(buffer, key2, value, index14);
+            index15 = serializeBoolean(buffer, key2, value, index15);
           } else if (value instanceof Date || utils_1.isDate(value)) {
-            index14 = serializeDate(buffer, key2, value, index14);
+            index15 = serializeDate(buffer, key2, value, index15);
           } else if (value === void 0) {
             if (ignoreUndefined === false)
-              index14 = serializeNull(buffer, key2, value, index14);
+              index15 = serializeNull(buffer, key2, value, index15);
           } else if (value === null) {
-            index14 = serializeNull(buffer, key2, value, index14);
+            index15 = serializeNull(buffer, key2, value, index15);
           } else if (value["_bsontype"] === "ObjectId" || value["_bsontype"] === "ObjectID") {
-            index14 = serializeObjectId(buffer, key2, value, index14);
+            index15 = serializeObjectId(buffer, key2, value, index15);
           } else if (utils_1.isUint8Array(value)) {
-            index14 = serializeBuffer(buffer, key2, value, index14);
+            index15 = serializeBuffer(buffer, key2, value, index15);
           } else if (value instanceof RegExp || utils_1.isRegExp(value)) {
-            index14 = serializeRegExp(buffer, key2, value, index14);
+            index15 = serializeRegExp(buffer, key2, value, index15);
           } else if (type === "object" && value["_bsontype"] == null) {
-            index14 = serializeObject(buffer, key2, value, index14, checkKeys, depth, serializeFunctions, ignoreUndefined, false, path);
+            index15 = serializeObject(buffer, key2, value, index15, checkKeys, depth, serializeFunctions, ignoreUndefined, false, path);
           } else if (type === "object" && value["_bsontype"] === "Decimal128") {
-            index14 = serializeDecimal128(buffer, key2, value, index14);
+            index15 = serializeDecimal128(buffer, key2, value, index15);
           } else if (value["_bsontype"] === "Long" || value["_bsontype"] === "Timestamp") {
-            index14 = serializeLong(buffer, key2, value, index14);
+            index15 = serializeLong(buffer, key2, value, index15);
           } else if (value["_bsontype"] === "Double") {
-            index14 = serializeDouble(buffer, key2, value, index14);
+            index15 = serializeDouble(buffer, key2, value, index15);
           } else if (value["_bsontype"] === "Code") {
-            index14 = serializeCode(buffer, key2, value, index14, checkKeys, depth, serializeFunctions, ignoreUndefined);
+            index15 = serializeCode(buffer, key2, value, index15, checkKeys, depth, serializeFunctions, ignoreUndefined);
           } else if (typeof value === "function" && serializeFunctions) {
-            index14 = serializeFunction(buffer, key2, value, index14, checkKeys, depth, serializeFunctions);
+            index15 = serializeFunction(buffer, key2, value, index15, checkKeys, depth, serializeFunctions);
           } else if (value["_bsontype"] === "Binary") {
-            index14 = serializeBinary(buffer, key2, value, index14);
+            index15 = serializeBinary(buffer, key2, value, index15);
           } else if (value["_bsontype"] === "Symbol") {
-            index14 = serializeSymbol(buffer, key2, value, index14);
+            index15 = serializeSymbol(buffer, key2, value, index15);
           } else if (value["_bsontype"] === "DBRef") {
-            index14 = serializeDBRef(buffer, key2, value, index14, depth, serializeFunctions);
+            index15 = serializeDBRef(buffer, key2, value, index15, depth, serializeFunctions);
           } else if (value["_bsontype"] === "BSONRegExp") {
-            index14 = serializeBSONRegExp(buffer, key2, value, index14);
+            index15 = serializeBSONRegExp(buffer, key2, value, index15);
           } else if (value["_bsontype"] === "Int32") {
-            index14 = serializeInt32(buffer, key2, value, index14);
+            index15 = serializeInt32(buffer, key2, value, index15);
           } else if (value["_bsontype"] === "MinKey" || value["_bsontype"] === "MaxKey") {
-            index14 = serializeMinMax(buffer, key2, value, index14);
+            index15 = serializeMinMax(buffer, key2, value, index15);
           } else if (typeof value["_bsontype"] !== "undefined") {
             throw new error_1.BSONTypeError("Unrecognized or invalid _bsontype: " + value["_bsontype"]);
           }
         }
       }
       path.pop();
-      buffer[index14++] = 0;
-      var size = index14 - startingIndex;
+      buffer[index15++] = 0;
+      var size = index15 - startingIndex;
       buffer[startingIndex++] = size & 255;
       buffer[startingIndex++] = size >> 8 & 255;
       buffer[startingIndex++] = size >> 16 & 255;
       buffer[startingIndex++] = size >> 24 & 255;
-      return index14;
+      return index15;
     }
     exports.serializeInto = serializeInto;
   }
@@ -11495,14 +11568,14 @@ var require_bson = __commonJS({
     function deserializeStream(data, startIndex, numberOfDocuments, documents, docStartIndex, options2) {
       var internalOptions = Object.assign({ allowObjectSmallerThanBufferSize: true, index: 0 }, options2);
       var bufferData = ensure_buffer_1.ensureBuffer(data);
-      var index14 = startIndex;
+      var index15 = startIndex;
       for (var i2 = 0; i2 < numberOfDocuments; i2++) {
-        var size = bufferData[index14] | bufferData[index14 + 1] << 8 | bufferData[index14 + 2] << 16 | bufferData[index14 + 3] << 24;
-        internalOptions.index = index14;
+        var size = bufferData[index15] | bufferData[index15 + 1] << 8 | bufferData[index15 + 2] << 16 | bufferData[index15 + 3] << 24;
+        internalOptions.index = index15;
         documents[docStartIndex + i2] = deserializer_1.deserialize(bufferData, internalOptions);
-        index14 = index14 + size;
+        index15 = index15 + size;
       }
-      return index14;
+      return index15;
     }
     exports.deserializeStream = deserializeStream;
     var BSON = {
@@ -14067,10 +14140,10 @@ var require_common_functions = __commonJS({
       function processResults(indexes) {
         const info = {};
         for (let i2 = 0; i2 < indexes.length; i2++) {
-          const index14 = indexes[i2];
-          info[index14.name] = [];
-          for (const name2 in index14.key) {
-            info[index14.name].push([name2, index14.key[name2]]);
+          const index15 = indexes[i2];
+          info[index15.name] = [];
+          for (const name2 in index15.key) {
+            info[index15.name].push([name2, index15.key[name2]]);
           }
         }
         return info;
@@ -14498,8 +14571,8 @@ var require_common2 = __commonJS({
       getUpsertedIds() {
         return this.result.upserted;
       }
-      getUpsertedIdAt(index14) {
-        return this.result.upserted[index14];
+      getUpsertedIdAt(index15) {
+        return this.result.upserted[index15];
       }
       getRawResponse() {
         return this.result;
@@ -14510,8 +14583,8 @@ var require_common2 = __commonJS({
       getWriteErrorCount() {
         return this.result.writeErrors.length;
       }
-      getWriteErrorAt(index14) {
-        return index14 < this.result.writeErrors.length ? this.result.writeErrors[index14] : void 0;
+      getWriteErrorAt(index15) {
+        return index15 < this.result.writeErrors.length ? this.result.writeErrors[index15] : void 0;
       }
       getWriteErrors() {
         return this.result.writeErrors;
@@ -15259,8 +15332,8 @@ var require_denque = __commonJS({
         this._fromArray(array2);
       }
     }
-    Denque.prototype.peekAt = function peekAt(index14) {
-      var i2 = index14;
+    Denque.prototype.peekAt = function peekAt(index15) {
+      var i2 = index15;
       if (i2 !== (i2 | 0)) {
         return void 0;
       }
@@ -15272,7 +15345,7 @@ var require_denque = __commonJS({
       i2 = this._head + i2 & this._capacityMask;
       return this._list[i2];
     };
-    Denque.prototype.get = function get4(i2) {
+    Denque.prototype.get = function get5(i2) {
       return this.peekAt(i2);
     };
     Denque.prototype.peek = function peek() {
@@ -15354,8 +15427,8 @@ var require_denque = __commonJS({
         this._shrinkArray();
       return item;
     };
-    Denque.prototype.removeOne = function removeOne(index14) {
-      var i2 = index14;
+    Denque.prototype.removeOne = function removeOne(index15) {
+      var i2 = index15;
       if (i2 !== (i2 | 0)) {
         return void 0;
       }
@@ -15370,14 +15443,14 @@ var require_denque = __commonJS({
       i2 = this._head + i2 & this._capacityMask;
       var item = this._list[i2];
       var k;
-      if (index14 < size / 2) {
-        for (k = index14; k > 0; k--) {
+      if (index15 < size / 2) {
+        for (k = index15; k > 0; k--) {
           this._list[i2] = this._list[i2 = i2 - 1 + len & this._capacityMask];
         }
         this._list[i2] = void 0;
         this._head = this._head + 1 + len & this._capacityMask;
       } else {
-        for (k = size - 1 - index14; k > 0; k--) {
+        for (k = size - 1 - index15; k > 0; k--) {
           this._list[i2] = this._list[i2 = i2 + 1 + len & this._capacityMask];
         }
         this._list[i2] = void 0;
@@ -15385,8 +15458,8 @@ var require_denque = __commonJS({
       }
       return item;
     };
-    Denque.prototype.remove = function remove(index14, count) {
-      var i2 = index14;
+    Denque.prototype.remove = function remove(index15, count) {
+      var i2 = index15;
       var removed;
       var del_count = count;
       if (i2 !== (i2 | 0)) {
@@ -15418,14 +15491,14 @@ var require_denque = __commonJS({
         removed[k] = this._list[this._head + i2 + k & this._capacityMask];
       }
       i2 = this._head + i2 & this._capacityMask;
-      if (index14 + count === size) {
+      if (index15 + count === size) {
         this._tail = this._tail - count + len & this._capacityMask;
         for (k = count; k > 0; k--) {
           this._list[i2 = i2 + 1 + len & this._capacityMask] = void 0;
         }
         return removed;
       }
-      if (index14 === 0) {
+      if (index15 === 0) {
         this._head = this._head + count + len & this._capacityMask;
         for (k = count - 1; k > 0; k--) {
           this._list[i2 = i2 + 1 + len & this._capacityMask] = void 0;
@@ -15433,8 +15506,8 @@ var require_denque = __commonJS({
         return removed;
       }
       if (i2 < size / 2) {
-        this._head = this._head + index14 + count + len & this._capacityMask;
-        for (k = index14; k > 0; k--) {
+        this._head = this._head + index15 + count + len & this._capacityMask;
+        for (k = index15; k > 0; k--) {
           this.unshift(this._list[i2 = i2 - 1 + len & this._capacityMask]);
         }
         i2 = this._head - 1 + len & this._capacityMask;
@@ -15442,12 +15515,12 @@ var require_denque = __commonJS({
           this._list[i2 = i2 - 1 + len & this._capacityMask] = void 0;
           del_count--;
         }
-        if (index14 < 0)
+        if (index15 < 0)
           this._tail = i2;
       } else {
         this._tail = i2;
         i2 = i2 + count + len & this._capacityMask;
-        for (k = size - (count + index14); k > 0; k--) {
+        for (k = size - (count + index15); k > 0; k--) {
           this.push(this._list[i2++]);
         }
         i2 = this._tail;
@@ -15460,8 +15533,8 @@ var require_denque = __commonJS({
         this._shrinkArray();
       return removed;
     };
-    Denque.prototype.splice = function splice(index14, count) {
-      var i2 = index14;
+    Denque.prototype.splice = function splice(index15, count) {
+      var i2 = index15;
       if (i2 !== (i2 | 0)) {
         return void 0;
       }
@@ -17891,7 +17964,7 @@ var require_indexes = __commonJS({
             callback(err);
             return;
           }
-          const indexNames = indexes.map((index14) => index14.name || "");
+          const indexNames = indexes.map((index15) => index15.name || "");
           callback(void 0, indexNames);
         });
       }
@@ -17926,7 +17999,7 @@ var require_indexes = __commonJS({
           }
           if (indexes) {
             indexes = Array.isArray(indexes) ? indexes : [indexes];
-            if (indexes.some((index14) => index14.name === indexName)) {
+            if (indexes.some((index15) => index15.name === indexName)) {
               callback(void 0, indexName);
               return;
             }
@@ -21363,14 +21436,14 @@ var require_URLSearchParams = __commonJS({
           if (!internal) {
             throw new globalObject.TypeError("next() called on a value that is not a URLSearchParams iterator object");
           }
-          const { target, kind, index: index14 } = internal;
+          const { target, kind, index: index15 } = internal;
           const values = Array.from(target[implSymbol]);
           const len = values.length;
-          if (index14 >= len) {
+          if (index15 >= len) {
             return newObjectInRealm(globalObject, { value: void 0, done: true });
           }
-          const pair = values[index14];
-          internal.index = index14 + 1;
+          const pair = values[index15];
+          internal.index = index15 + 1;
           return newObjectInRealm(globalObject, utils.iteratorResult(pair.map(utils.tryWrapperForImpl), kind));
         }
       });
@@ -22244,19 +22317,19 @@ var require_lib2 = __commonJS({
     var CommaAndColonSeparatedRecord = class extends CaseInsensitiveMap {
       constructor(from) {
         super();
-        for (const entry14 of (from !== null && from !== void 0 ? from : "").split(",")) {
-          if (!entry14)
+        for (const entry15 of (from !== null && from !== void 0 ? from : "").split(",")) {
+          if (!entry15)
             continue;
-          const colonIndex = entry14.indexOf(":");
+          const colonIndex = entry15.indexOf(":");
           if (colonIndex === -1) {
-            this.set(entry14, "");
+            this.set(entry15, "");
           } else {
-            this.set(entry14.slice(0, colonIndex), entry14.slice(colonIndex + 1));
+            this.set(entry15.slice(0, colonIndex), entry15.slice(colonIndex + 1));
           }
         }
       }
       toString() {
-        return [...this].map((entry14) => entry14.join(":")).join(",");
+        return [...this].map((entry15) => entry15.join(":")).join(",");
       }
     };
     exports.CommaAndColonSeparatedRecord = CommaAndColonSeparatedRecord;
@@ -22369,8 +22442,8 @@ var require_memory_pager = __commonJS({
       }
       return Buffer.concat(list);
     };
-    function grow(pager, index14) {
-      while (pager.maxPages < index14) {
+    function grow(pager, index15) {
+      while (pager.maxPages < index15) {
         var old = pager.pages;
         pager.pages = new Array(32768);
         pager.pages[0] = old;
@@ -24806,43 +24879,43 @@ var require_commands = __commonJS({
           buffers.push(projection);
         }
         const totalLength = header.length + query.length + (projection ? projection.length : 0);
-        let index14 = 4;
+        let index15 = 4;
         header[3] = totalLength >> 24 & 255;
         header[2] = totalLength >> 16 & 255;
         header[1] = totalLength >> 8 & 255;
         header[0] = totalLength & 255;
-        header[index14 + 3] = this.requestId >> 24 & 255;
-        header[index14 + 2] = this.requestId >> 16 & 255;
-        header[index14 + 1] = this.requestId >> 8 & 255;
-        header[index14] = this.requestId & 255;
-        index14 = index14 + 4;
-        header[index14 + 3] = 0 >> 24 & 255;
-        header[index14 + 2] = 0 >> 16 & 255;
-        header[index14 + 1] = 0 >> 8 & 255;
-        header[index14] = 0 & 255;
-        index14 = index14 + 4;
-        header[index14 + 3] = constants_1.OP_QUERY >> 24 & 255;
-        header[index14 + 2] = constants_1.OP_QUERY >> 16 & 255;
-        header[index14 + 1] = constants_1.OP_QUERY >> 8 & 255;
-        header[index14] = constants_1.OP_QUERY & 255;
-        index14 = index14 + 4;
-        header[index14 + 3] = flags >> 24 & 255;
-        header[index14 + 2] = flags >> 16 & 255;
-        header[index14 + 1] = flags >> 8 & 255;
-        header[index14] = flags & 255;
-        index14 = index14 + 4;
-        index14 = index14 + header.write(this.ns, index14, "utf8") + 1;
-        header[index14 - 1] = 0;
-        header[index14 + 3] = this.numberToSkip >> 24 & 255;
-        header[index14 + 2] = this.numberToSkip >> 16 & 255;
-        header[index14 + 1] = this.numberToSkip >> 8 & 255;
-        header[index14] = this.numberToSkip & 255;
-        index14 = index14 + 4;
-        header[index14 + 3] = this.numberToReturn >> 24 & 255;
-        header[index14 + 2] = this.numberToReturn >> 16 & 255;
-        header[index14 + 1] = this.numberToReturn >> 8 & 255;
-        header[index14] = this.numberToReturn & 255;
-        index14 = index14 + 4;
+        header[index15 + 3] = this.requestId >> 24 & 255;
+        header[index15 + 2] = this.requestId >> 16 & 255;
+        header[index15 + 1] = this.requestId >> 8 & 255;
+        header[index15] = this.requestId & 255;
+        index15 = index15 + 4;
+        header[index15 + 3] = 0 >> 24 & 255;
+        header[index15 + 2] = 0 >> 16 & 255;
+        header[index15 + 1] = 0 >> 8 & 255;
+        header[index15] = 0 & 255;
+        index15 = index15 + 4;
+        header[index15 + 3] = constants_1.OP_QUERY >> 24 & 255;
+        header[index15 + 2] = constants_1.OP_QUERY >> 16 & 255;
+        header[index15 + 1] = constants_1.OP_QUERY >> 8 & 255;
+        header[index15] = constants_1.OP_QUERY & 255;
+        index15 = index15 + 4;
+        header[index15 + 3] = flags >> 24 & 255;
+        header[index15 + 2] = flags >> 16 & 255;
+        header[index15 + 1] = flags >> 8 & 255;
+        header[index15] = flags & 255;
+        index15 = index15 + 4;
+        index15 = index15 + header.write(this.ns, index15, "utf8") + 1;
+        header[index15 - 1] = 0;
+        header[index15 + 3] = this.numberToSkip >> 24 & 255;
+        header[index15 + 2] = this.numberToSkip >> 16 & 255;
+        header[index15 + 1] = this.numberToSkip >> 8 & 255;
+        header[index15] = this.numberToSkip & 255;
+        index15 = index15 + 4;
+        header[index15 + 3] = this.numberToReturn >> 24 & 255;
+        header[index15 + 2] = this.numberToReturn >> 16 & 255;
+        header[index15 + 1] = this.numberToReturn >> 8 & 255;
+        header[index15] = this.numberToReturn & 255;
+        index15 = index15 + 4;
         return buffers;
       }
     };
@@ -24856,50 +24929,50 @@ var require_commands = __commonJS({
       }
       toBin() {
         const length = 4 + Buffer.byteLength(this.ns) + 1 + 4 + 8 + 4 * 4;
-        let index14 = 0;
+        let index15 = 0;
         const _buffer = Buffer.alloc(length);
-        _buffer[index14 + 3] = length >> 24 & 255;
-        _buffer[index14 + 2] = length >> 16 & 255;
-        _buffer[index14 + 1] = length >> 8 & 255;
-        _buffer[index14] = length & 255;
-        index14 = index14 + 4;
-        _buffer[index14 + 3] = this.requestId >> 24 & 255;
-        _buffer[index14 + 2] = this.requestId >> 16 & 255;
-        _buffer[index14 + 1] = this.requestId >> 8 & 255;
-        _buffer[index14] = this.requestId & 255;
-        index14 = index14 + 4;
-        _buffer[index14 + 3] = 0 >> 24 & 255;
-        _buffer[index14 + 2] = 0 >> 16 & 255;
-        _buffer[index14 + 1] = 0 >> 8 & 255;
-        _buffer[index14] = 0 & 255;
-        index14 = index14 + 4;
-        _buffer[index14 + 3] = constants_1.OP_GETMORE >> 24 & 255;
-        _buffer[index14 + 2] = constants_1.OP_GETMORE >> 16 & 255;
-        _buffer[index14 + 1] = constants_1.OP_GETMORE >> 8 & 255;
-        _buffer[index14] = constants_1.OP_GETMORE & 255;
-        index14 = index14 + 4;
-        _buffer[index14 + 3] = 0 >> 24 & 255;
-        _buffer[index14 + 2] = 0 >> 16 & 255;
-        _buffer[index14 + 1] = 0 >> 8 & 255;
-        _buffer[index14] = 0 & 255;
-        index14 = index14 + 4;
-        index14 = index14 + _buffer.write(this.ns, index14, "utf8") + 1;
-        _buffer[index14 - 1] = 0;
-        _buffer[index14 + 3] = this.numberToReturn >> 24 & 255;
-        _buffer[index14 + 2] = this.numberToReturn >> 16 & 255;
-        _buffer[index14 + 1] = this.numberToReturn >> 8 & 255;
-        _buffer[index14] = this.numberToReturn & 255;
-        index14 = index14 + 4;
-        _buffer[index14 + 3] = this.cursorId.getLowBits() >> 24 & 255;
-        _buffer[index14 + 2] = this.cursorId.getLowBits() >> 16 & 255;
-        _buffer[index14 + 1] = this.cursorId.getLowBits() >> 8 & 255;
-        _buffer[index14] = this.cursorId.getLowBits() & 255;
-        index14 = index14 + 4;
-        _buffer[index14 + 3] = this.cursorId.getHighBits() >> 24 & 255;
-        _buffer[index14 + 2] = this.cursorId.getHighBits() >> 16 & 255;
-        _buffer[index14 + 1] = this.cursorId.getHighBits() >> 8 & 255;
-        _buffer[index14] = this.cursorId.getHighBits() & 255;
-        index14 = index14 + 4;
+        _buffer[index15 + 3] = length >> 24 & 255;
+        _buffer[index15 + 2] = length >> 16 & 255;
+        _buffer[index15 + 1] = length >> 8 & 255;
+        _buffer[index15] = length & 255;
+        index15 = index15 + 4;
+        _buffer[index15 + 3] = this.requestId >> 24 & 255;
+        _buffer[index15 + 2] = this.requestId >> 16 & 255;
+        _buffer[index15 + 1] = this.requestId >> 8 & 255;
+        _buffer[index15] = this.requestId & 255;
+        index15 = index15 + 4;
+        _buffer[index15 + 3] = 0 >> 24 & 255;
+        _buffer[index15 + 2] = 0 >> 16 & 255;
+        _buffer[index15 + 1] = 0 >> 8 & 255;
+        _buffer[index15] = 0 & 255;
+        index15 = index15 + 4;
+        _buffer[index15 + 3] = constants_1.OP_GETMORE >> 24 & 255;
+        _buffer[index15 + 2] = constants_1.OP_GETMORE >> 16 & 255;
+        _buffer[index15 + 1] = constants_1.OP_GETMORE >> 8 & 255;
+        _buffer[index15] = constants_1.OP_GETMORE & 255;
+        index15 = index15 + 4;
+        _buffer[index15 + 3] = 0 >> 24 & 255;
+        _buffer[index15 + 2] = 0 >> 16 & 255;
+        _buffer[index15 + 1] = 0 >> 8 & 255;
+        _buffer[index15] = 0 & 255;
+        index15 = index15 + 4;
+        index15 = index15 + _buffer.write(this.ns, index15, "utf8") + 1;
+        _buffer[index15 - 1] = 0;
+        _buffer[index15 + 3] = this.numberToReturn >> 24 & 255;
+        _buffer[index15 + 2] = this.numberToReturn >> 16 & 255;
+        _buffer[index15 + 1] = this.numberToReturn >> 8 & 255;
+        _buffer[index15] = this.numberToReturn & 255;
+        index15 = index15 + 4;
+        _buffer[index15 + 3] = this.cursorId.getLowBits() >> 24 & 255;
+        _buffer[index15 + 2] = this.cursorId.getLowBits() >> 16 & 255;
+        _buffer[index15 + 1] = this.cursorId.getLowBits() >> 8 & 255;
+        _buffer[index15] = this.cursorId.getLowBits() & 255;
+        index15 = index15 + 4;
+        _buffer[index15 + 3] = this.cursorId.getHighBits() >> 24 & 255;
+        _buffer[index15 + 2] = this.cursorId.getHighBits() >> 16 & 255;
+        _buffer[index15 + 1] = this.cursorId.getHighBits() >> 8 & 255;
+        _buffer[index15] = this.cursorId.getHighBits() & 255;
+        index15 = index15 + 4;
         return [_buffer];
       }
     };
@@ -24912,49 +24985,49 @@ var require_commands = __commonJS({
       }
       toBin() {
         const length = 4 + 4 + 4 * 4 + this.cursorIds.length * 8;
-        let index14 = 0;
+        let index15 = 0;
         const _buffer = Buffer.alloc(length);
-        _buffer[index14 + 3] = length >> 24 & 255;
-        _buffer[index14 + 2] = length >> 16 & 255;
-        _buffer[index14 + 1] = length >> 8 & 255;
-        _buffer[index14] = length & 255;
-        index14 = index14 + 4;
-        _buffer[index14 + 3] = this.requestId >> 24 & 255;
-        _buffer[index14 + 2] = this.requestId >> 16 & 255;
-        _buffer[index14 + 1] = this.requestId >> 8 & 255;
-        _buffer[index14] = this.requestId & 255;
-        index14 = index14 + 4;
-        _buffer[index14 + 3] = 0 >> 24 & 255;
-        _buffer[index14 + 2] = 0 >> 16 & 255;
-        _buffer[index14 + 1] = 0 >> 8 & 255;
-        _buffer[index14] = 0 & 255;
-        index14 = index14 + 4;
-        _buffer[index14 + 3] = constants_1.OP_KILL_CURSORS >> 24 & 255;
-        _buffer[index14 + 2] = constants_1.OP_KILL_CURSORS >> 16 & 255;
-        _buffer[index14 + 1] = constants_1.OP_KILL_CURSORS >> 8 & 255;
-        _buffer[index14] = constants_1.OP_KILL_CURSORS & 255;
-        index14 = index14 + 4;
-        _buffer[index14 + 3] = 0 >> 24 & 255;
-        _buffer[index14 + 2] = 0 >> 16 & 255;
-        _buffer[index14 + 1] = 0 >> 8 & 255;
-        _buffer[index14] = 0 & 255;
-        index14 = index14 + 4;
-        _buffer[index14 + 3] = this.cursorIds.length >> 24 & 255;
-        _buffer[index14 + 2] = this.cursorIds.length >> 16 & 255;
-        _buffer[index14 + 1] = this.cursorIds.length >> 8 & 255;
-        _buffer[index14] = this.cursorIds.length & 255;
-        index14 = index14 + 4;
+        _buffer[index15 + 3] = length >> 24 & 255;
+        _buffer[index15 + 2] = length >> 16 & 255;
+        _buffer[index15 + 1] = length >> 8 & 255;
+        _buffer[index15] = length & 255;
+        index15 = index15 + 4;
+        _buffer[index15 + 3] = this.requestId >> 24 & 255;
+        _buffer[index15 + 2] = this.requestId >> 16 & 255;
+        _buffer[index15 + 1] = this.requestId >> 8 & 255;
+        _buffer[index15] = this.requestId & 255;
+        index15 = index15 + 4;
+        _buffer[index15 + 3] = 0 >> 24 & 255;
+        _buffer[index15 + 2] = 0 >> 16 & 255;
+        _buffer[index15 + 1] = 0 >> 8 & 255;
+        _buffer[index15] = 0 & 255;
+        index15 = index15 + 4;
+        _buffer[index15 + 3] = constants_1.OP_KILL_CURSORS >> 24 & 255;
+        _buffer[index15 + 2] = constants_1.OP_KILL_CURSORS >> 16 & 255;
+        _buffer[index15 + 1] = constants_1.OP_KILL_CURSORS >> 8 & 255;
+        _buffer[index15] = constants_1.OP_KILL_CURSORS & 255;
+        index15 = index15 + 4;
+        _buffer[index15 + 3] = 0 >> 24 & 255;
+        _buffer[index15 + 2] = 0 >> 16 & 255;
+        _buffer[index15 + 1] = 0 >> 8 & 255;
+        _buffer[index15] = 0 & 255;
+        index15 = index15 + 4;
+        _buffer[index15 + 3] = this.cursorIds.length >> 24 & 255;
+        _buffer[index15 + 2] = this.cursorIds.length >> 16 & 255;
+        _buffer[index15 + 1] = this.cursorIds.length >> 8 & 255;
+        _buffer[index15] = this.cursorIds.length & 255;
+        index15 = index15 + 4;
         for (let i2 = 0; i2 < this.cursorIds.length; i2++) {
-          _buffer[index14 + 3] = this.cursorIds[i2].getLowBits() >> 24 & 255;
-          _buffer[index14 + 2] = this.cursorIds[i2].getLowBits() >> 16 & 255;
-          _buffer[index14 + 1] = this.cursorIds[i2].getLowBits() >> 8 & 255;
-          _buffer[index14] = this.cursorIds[i2].getLowBits() & 255;
-          index14 = index14 + 4;
-          _buffer[index14 + 3] = this.cursorIds[i2].getHighBits() >> 24 & 255;
-          _buffer[index14 + 2] = this.cursorIds[i2].getHighBits() >> 16 & 255;
-          _buffer[index14 + 1] = this.cursorIds[i2].getHighBits() >> 8 & 255;
-          _buffer[index14] = this.cursorIds[i2].getHighBits() & 255;
-          index14 = index14 + 4;
+          _buffer[index15 + 3] = this.cursorIds[i2].getLowBits() >> 24 & 255;
+          _buffer[index15 + 2] = this.cursorIds[i2].getLowBits() >> 16 & 255;
+          _buffer[index15 + 1] = this.cursorIds[i2].getLowBits() >> 8 & 255;
+          _buffer[index15] = this.cursorIds[i2].getLowBits() & 255;
+          index15 = index15 + 4;
+          _buffer[index15 + 3] = this.cursorIds[i2].getHighBits() >> 24 & 255;
+          _buffer[index15 + 2] = this.cursorIds[i2].getHighBits() >> 16 & 255;
+          _buffer[index15 + 1] = this.cursorIds[i2].getHighBits() >> 8 & 255;
+          _buffer[index15] = this.cursorIds[i2].getHighBits() & 255;
+          index15 = index15 + 4;
         }
         return [_buffer];
       }
@@ -30454,8 +30527,8 @@ var require_topology = __commonJS({
           topology.s.servers.set(serverDescription.address, server2);
         }
       }
-      for (const entry14 of topology.s.servers) {
-        const serverAddress = entry14[0];
+      for (const entry15 of topology.s.servers) {
+        const serverAddress = entry15[0];
         if (topology.description.hasServer(serverAddress)) {
           continue;
         }
@@ -30617,8 +30690,8 @@ var require_connect2 = __commonJS({
         return (0, connection_string_1.resolveSRVRecord)(options2, (err, hosts) => {
           if (err || !hosts)
             return callback(err);
-          for (const [index14, host] of hosts.entries()) {
-            options2.hosts[index14] = host;
+          for (const [index15, host] of hosts.entries()) {
+            options2.hosts[index15] = host;
           }
           return createTopology(mongoClient, options2, connectCallback);
         });
@@ -32999,11 +33072,11 @@ var require_upload = __commonJS({
     }
     function checkChunksIndex(stream, callback) {
       stream.chunks.listIndexes().toArray((error2, indexes) => {
-        let index14;
+        let index15;
         if (error2) {
           if (error2 instanceof error_1.MongoError && error2.code === error_1.MONGODB_ERROR_CODES.NamespaceNotFound) {
-            index14 = { files_id: 1, n: 1 };
-            stream.chunks.createIndex(index14, { background: false, unique: true }, (error3) => {
+            index15 = { files_id: 1, n: 1 };
+            stream.chunks.createIndex(index15, { background: false, unique: true }, (error3) => {
               if (error3) {
                 return callback(error3);
               }
@@ -33015,10 +33088,10 @@ var require_upload = __commonJS({
         }
         let hasChunksIndex = false;
         if (indexes) {
-          indexes.forEach((index15) => {
-            if (index15.key) {
-              const keys = Object.keys(index15.key);
-              if (keys.length === 2 && index15.key.files_id === 1 && index15.key.n === 1) {
+          indexes.forEach((index16) => {
+            if (index16.key) {
+              const keys = Object.keys(index16.key);
+              if (keys.length === 2 && index16.key.files_id === 1 && index16.key.n === 1) {
                 hasChunksIndex = true;
               }
             }
@@ -33027,9 +33100,9 @@ var require_upload = __commonJS({
         if (hasChunksIndex) {
           callback();
         } else {
-          index14 = { files_id: 1, n: 1 };
+          index15 = { files_id: 1, n: 1 };
           const writeConcernOptions = getWriteOptions(stream);
-          stream.chunks.createIndex(index14, {
+          stream.chunks.createIndex(index15, {
             ...writeConcernOptions,
             background: true,
             unique: true
@@ -33066,11 +33139,11 @@ var require_upload = __commonJS({
           return callback();
         }
         stream.files.listIndexes().toArray((error3, indexes) => {
-          let index14;
+          let index15;
           if (error3) {
             if (error3 instanceof error_1.MongoError && error3.code === error_1.MONGODB_ERROR_CODES.NamespaceNotFound) {
-              index14 = { filename: 1, uploadDate: 1 };
-              stream.files.createIndex(index14, { background: false }, (error4) => {
+              index15 = { filename: 1, uploadDate: 1 };
+              stream.files.createIndex(index15, { background: false }, (error4) => {
                 if (error4) {
                   return callback(error4);
                 }
@@ -33082,9 +33155,9 @@ var require_upload = __commonJS({
           }
           let hasFileIndex = false;
           if (indexes) {
-            indexes.forEach((index15) => {
-              const keys = Object.keys(index15.key);
-              if (keys.length === 2 && index15.key.filename === 1 && index15.key.uploadDate === 1) {
+            indexes.forEach((index16) => {
+              const keys = Object.keys(index16.key);
+              if (keys.length === 2 && index16.key.filename === 1 && index16.key.uploadDate === 1) {
                 hasFileIndex = true;
               }
             });
@@ -33092,9 +33165,9 @@ var require_upload = __commonJS({
           if (hasFileIndex) {
             checkChunksIndex(stream, callback);
           } else {
-            index14 = { filename: 1, uploadDate: 1 };
+            index15 = { filename: 1, uploadDate: 1 };
             const writeConcernOptions = getWriteOptions(stream);
-            stream.files.createIndex(index14, {
+            stream.files.createIndex(index15, {
               ...writeConcernOptions,
               background: false
             }, (error4) => {
@@ -33736,13 +33809,75 @@ var init_db_da77f925 = __esm({
   }
 });
 
-// .svelte-kit/output/server/entries/endpoints/todos/work.js
-var work_exports = {};
-__export(work_exports, {
+// .svelte-kit/output/server/entries/endpoints/todos/writing.js
+var writing_exports = {};
+__export(writing_exports, {
   get: () => get,
   post: () => post
 });
 async function get() {
+  try {
+    const dbConnection = await clientPromise$1;
+    const db = dbConnection.db("test").collection("writings");
+    const writingItems = await db.find().sort({ year: -1 }).toArray();
+    if (!writingItems) {
+      throw new Error("No writing items.");
+    }
+    return {
+      status: 200,
+      body: {
+        writingItems
+      }
+    };
+  } catch (error2) {
+    return {
+      status: 400,
+      body: {
+        message: error2.message
+      }
+    };
+  }
+}
+async function post(request) {
+  try {
+    const dbConnection = await clientPromise$1;
+    const db = dbConnection.db("test").collection("writings");
+    const writingItem = JSON.parse(request.body);
+    await db.insertOne(writingItem);
+    if (!writingItem) {
+      throw new Error("There was an error awaiting the transaction.");
+    }
+    return {
+      status: 200,
+      body: {
+        status: "Success"
+      }
+    };
+  } catch (error2) {
+    return {
+      status: 500,
+      body: {
+        message: error2.message
+      }
+    };
+  }
+}
+var import_mongodb2, import_dotenv2;
+var init_writing = __esm({
+  ".svelte-kit/output/server/entries/endpoints/todos/writing.js"() {
+    init_db_da77f925();
+    import_mongodb2 = __toESM(require_lib3(), 1);
+    import_dotenv2 = __toESM(require_main(), 1);
+  }
+});
+
+// .svelte-kit/output/server/entries/endpoints/todos/work.js
+var work_exports = {};
+__export(work_exports, {
+  get: () => get2,
+  post: () => post2
+});
+async function get2() {
   try {
     const dbConnection = await clientPromise$1;
     const db = dbConnection.db("test").collection("works");
@@ -33765,7 +33900,7 @@ async function get() {
     };
   }
 }
-async function post(request) {
+async function post2(request) {
   const { title, subtitle, dates, description, photo, backgroundColor } = request.body();
   new Work({ title, subtitle, dates, description, photo, backgroundColor });
   try {
@@ -33791,21 +33926,21 @@ async function post(request) {
     };
   }
 }
-var import_mongodb2, import_dotenv2;
+var import_mongodb3, import_dotenv3;
 var init_work = __esm({
   ".svelte-kit/output/server/entries/endpoints/todos/work.js"() {
     init_db_da77f925();
-    import_mongodb2 = __toESM(require_lib3(), 1);
-    import_dotenv2 = __toESM(require_main(), 1);
+    import_mongodb3 = __toESM(require_lib3(), 1);
+    import_dotenv3 = __toESM(require_main(), 1);
   }
 });
 
 // .svelte-kit/output/server/entries/endpoints/todos/project.js
 var project_exports = {};
 __export(project_exports, {
-  get: () => get2
+  get: () => get3
 });
-async function get2() {
+async function get3() {
   try {
     const dbConnection = await clientPromise$1;
     const db = dbConnection.db("test").collection("projects");
@@ -33832,22 +33967,22 @@ async function get2() {
     };
   }
 }
-var import_mongodb3, import_dotenv3;
+var import_mongodb4, import_dotenv4;
 var init_project = __esm({
   ".svelte-kit/output/server/entries/endpoints/todos/project.js"() {
     init_db_da77f925();
-    import_mongodb3 = __toESM(require_lib3(), 1);
-    import_dotenv3 = __toESM(require_main(), 1);
+    import_mongodb4 = __toESM(require_lib3(), 1);
+    import_dotenv4 = __toESM(require_main(), 1);
   }
 });
 
 // .svelte-kit/output/server/entries/endpoints/todos/education.js
 var education_exports = {};
 __export(education_exports, {
-  get: () => get3,
-  post: () => post2
+  get: () => get4,
+  post: () => post3
 });
-async function get3() {
+async function get4() {
   try {
     const dbConnection = await clientPromise$1;
     const db = dbConnection.db("test").collection("educations");
@@ -33870,7 +34005,7 @@ async function get3() {
     };
   }
 }
-async function post2(request) {
+async function post3(request) {
   try {
     const dbConnection = await clientPromise$1;
     const db = dbConnection.db("test").collection("educations");
@@ -33894,12 +34029,12 @@ async function post2(request) {
     };
   }
 }
-var import_mongodb4, import_dotenv4;
+var import_mongodb5, import_dotenv5;
 var init_education = __esm({
   ".svelte-kit/output/server/entries/endpoints/todos/education.js"() {
     init_db_da77f925();
-    import_mongodb4 = __toESM(require_lib3(), 1);
-    import_dotenv4 = __toESM(require_main(), 1);
+    import_mongodb5 = __toESM(require_lib3(), 1);
+    import_dotenv5 = __toESM(require_main(), 1);
   }
 });
 
@@ -34374,12 +34509,12 @@ function devalue(value) {
   }
   walk(value);
   var names = /* @__PURE__ */ new Map();
-  Array.from(counts).filter(function(entry14) {
-    return entry14[1] > 1;
+  Array.from(counts).filter(function(entry15) {
+    return entry15[1] > 1;
   }).sort(function(a, b) {
     return b[1] - a[1];
-  }).forEach(function(entry14, i2) {
-    names.set(entry14[0], getName(i2));
+  }).forEach(function(entry15, i2) {
+    names.set(entry15[0], getName(i2));
   });
   function stringify(thing) {
     if (names.has(thing)) {
@@ -35118,20 +35253,20 @@ function parse$1(str, options2) {
   var obj = {};
   var opt = options2 || {};
   var dec = opt.decode || decode;
-  var index14 = 0;
-  while (index14 < str.length) {
-    var eqIdx = str.indexOf("=", index14);
+  var index15 = 0;
+  while (index15 < str.length) {
+    var eqIdx = str.indexOf("=", index15);
     if (eqIdx === -1) {
       break;
     }
-    var endIdx = str.indexOf(";", index14);
+    var endIdx = str.indexOf(";", index15);
     if (endIdx === -1) {
       endIdx = str.length;
     } else if (endIdx < eqIdx) {
-      index14 = str.lastIndexOf(";", eqIdx - 1) + 1;
+      index15 = str.lastIndexOf(";", eqIdx - 1) + 1;
       continue;
     }
-    var key2 = str.slice(index14, eqIdx).trim();
+    var key2 = str.slice(index15, eqIdx).trim();
     if (void 0 === obj[key2]) {
       var val = str.slice(eqIdx + 1, endIdx).trim();
       if (val.charCodeAt(0) === 34) {
@@ -35139,7 +35274,7 @@ function parse$1(str, options2) {
       }
       obj[key2] = tryDecode(val, dec);
     }
-    index14 = endIdx + 1;
+    index15 = endIdx + 1;
   }
   return obj;
 }
@@ -35787,9 +35922,9 @@ async function load_shadow_data(route, event, options2, prerender) {
       }
       data.body = body;
     }
-    const get4 = method === "head" && mod.head || mod.get;
-    if (get4) {
-      const result = await get4(event);
+    const get5 = method === "head" && mod.head || mod.get;
+    if (get5) {
+      const result = await get5(event);
       if (result.fallthrough) {
         throw new Error(
           "fallthrough is no longer supported. Use matchers instead: https://kit.svelte.dev/docs/routing#advanced-routing-matching"
@@ -35999,8 +36134,8 @@ async function respond$1(opts) {
         if (error2) {
           while (i2--) {
             if (route.b[i2]) {
-              const index14 = route.b[i2];
-              const error_node = await options2.manifest._.nodes[index14]();
+              const index15 = route.b[i2];
+              const error_node = await options2.manifest._.nodes[index15]();
               let node_loaded;
               let j = i2;
               while (!(node_loaded = branch[j])) {
@@ -36485,7 +36620,7 @@ var manifest = {
   assets: /* @__PURE__ */ new Set(["favicon-16x16.png", "favicon-32x32.png", "favicon_package_v0.16/android-chrome-192x192.png", "favicon_package_v0.16/android-chrome-512x512.png", "favicon_package_v0.16/apple-touch-icon.png", "favicon_package_v0.16/browserconfig.xml", "favicon_package_v0.16/favicon-16x16.png", "favicon_package_v0.16/favicon-32x32.png", "favicon_package_v0.16/favicon.ico", "favicon_package_v0.16/mstile-150x150.png", "favicon_package_v0.16/safari-pinned-tab.svg", "favicon_package_v0.16/site.webmanifest"]),
   mimeTypes: { ".png": "image/png", ".xml": "application/xml", ".ico": "image/vnd.microsoft.icon", ".svg": "image/svg+xml", ".webmanifest": "application/manifest+json" },
   _: {
-    entry: { "file": "start-72be97bd.js", "js": ["start-72be97bd.js", "chunks/index-613948cd.js"], "css": [] },
+    entry: { "file": "start-d4e5c5f1.js", "js": ["start-d4e5c5f1.js", "chunks/index-613948cd.js"], "css": [] },
     nodes: [
       () => Promise.resolve().then(() => (init__(), __exports)),
       () => Promise.resolve().then(() => (init__2(), __exports2)),
@@ -36499,7 +36634,8 @@ var manifest = {
       () => Promise.resolve().then(() => (init__10(), __exports10)),
       () => Promise.resolve().then(() => (init__11(), __exports11)),
       () => Promise.resolve().then(() => (init__12(), __exports12)),
-      () => Promise.resolve().then(() => (init__13(), __exports13))
+      () => Promise.resolve().then(() => (init__13(), __exports13)),
+      () => Promise.resolve().then(() => (init__14(), __exports14))
     ],
     routes: [
       {
@@ -36614,14 +36750,33 @@ var manifest = {
       },
       {
         type: "page",
+        id: "Writings",
+        pattern: /^\/Writings\/?$/,
+        names: [],
+        types: [],
+        path: "/Writings",
+        shadow: null,
+        a: [0, 12],
+        b: [1]
+      },
+      {
+        type: "page",
         id: "iOSWork",
         pattern: /^\/iOSWork\/?$/,
         names: [],
         types: [],
         path: "/iOSWork",
         shadow: null,
-        a: [0, 12],
+        a: [0, 13],
         b: [1]
+      },
+      {
+        type: "endpoint",
+        id: "todos/writing",
+        pattern: /^\/todos\/writing\/?$/,
+        names: [],
+        types: [],
+        load: () => Promise.resolve().then(() => (init_writing(), writing_exports))
       },
       {
         type: "endpoint",
