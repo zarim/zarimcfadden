@@ -50,6 +50,13 @@
         font-weight: 400;
     }
 
+	#dissertation-style {
+		text-align: center;
+		font-size: 20px;
+		display: flex;
+		flex-direction: column;
+	}
+
     .section-content {
 		margin: 2% 0;
         font-size: 16px;
