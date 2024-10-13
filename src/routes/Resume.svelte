@@ -66,7 +66,7 @@
 		{/if}
 		<div class="resume-sidebar">
 			<p class="download-title">Download</p>
-			<a class="section-content" href="https://drive.google.com/file/d/1xyarWY2RfAMj28l-7EPNqT8U7mDKJVjL/view?usp=sharing" target="_blank" download="Zari-McFadden-Resume.pdf">Download PDF</a>
+			<a class="section-content" href="https://drive.google.com/file/d/1ZvGoIbqnHH7DE_ZYVrPj73k-s_PqDbrQ/view?usp=sharing" target="_blank" download="Zari-McFadden-Resume.pdf">Download PDF</a>
 		</div>
 		
 	</div>

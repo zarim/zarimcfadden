@@ -1,6 +1,6 @@
 {
   ".svelte-kit/runtime/client/start.js": {
-    "file": "start-d4e5c5f1.js",
+    "file": "start-72be97bd.js",
     "src": ".svelte-kit/runtime/client/start.js",
     "isEntry": true,
     "imports": [
@@ -18,7 +18,6 @@
       "src/routes/Work.svelte",
       "src/routes/WorkItem.svelte",
       "src/routes/WorkMenu.svelte",
-      "src/routes/Writings.svelte",
       "src/routes/iOSWork.svelte",
       "src/routes/index.svelte"
     ]
@@ -45,7 +44,7 @@
     ]
   },
   "src/routes/About.svelte": {
-    "file": "pages/About.svelte-2673e9b8.js",
+    "file": "pages/About.svelte-4d8f51a5.js",
     "src": "src/routes/About.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
@@ -56,11 +55,11 @@
       "src/routes/Menu.svelte"
     ],
     "css": [
-      "assets/pages/About.svelte-6cb9dc91.css"
+      "assets/pages/About.svelte-deffacd3.css"
     ]
   },
   "src/routes/Intro.svelte": {
-    "file": "pages/Intro.svelte-79385b4f.js",
+    "file": "pages/Intro.svelte-f5bd915e.js",
     "src": "src/routes/Intro.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
@@ -72,7 +71,7 @@
     ]
   },
   "src/routes/Header.svelte": {
-    "file": "pages/Header.svelte-0e37a812.js",
+    "file": "pages/Header.svelte-64e06afe.js",
     "src": "src/routes/Header.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
@@ -85,7 +84,7 @@
     ]
   },
   "src/routes/Menu.svelte": {
-    "file": "pages/Menu.svelte-449b402f.js",
+    "file": "pages/Menu.svelte-68177f87.js",
     "src": "src/routes/Menu.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
@@ -93,11 +92,11 @@
       "_index-613948cd.js"
     ],
     "css": [
-      "assets/pages/Menu.svelte-4a22c4ac.css"
+      "assets/pages/Menu.svelte-4eb8d690.css"
     ]
   },
   "src/routes/Resume.svelte": {
-    "file": "pages/Resume.svelte-313b41bd.js",
+    "file": "pages/Resume.svelte-21a01b31.js",
     "src": "src/routes/Resume.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
@@ -111,7 +110,7 @@
     ]
   },
   "src/routes/WebWork.svelte": {
-    "file": "pages/WebWork.svelte-f70b1c3b.js",
+    "file": "pages/WebWork.svelte-cb7c3232.js",
     "src": "src/routes/WebWork.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
@@ -151,7 +150,7 @@
     ]
   },
   "src/routes/Work.svelte": {
-    "file": "pages/Work.svelte-e760e8b3.js",
+    "file": "pages/Work.svelte-597707dc.js",
     "src": "src/routes/Work.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
@@ -163,25 +162,11 @@
       "src/routes/Menu.svelte"
     ],
     "css": [
-      "assets/pages/iOSWork.svelte-dc654aae.css"
-    ]
-  },
-  "src/routes/Writings.svelte": {
-    "file": "pages/Writings.svelte-0fffdf2f.js",
-    "src": "src/routes/Writings.svelte",
-    "isEntry": true,
-    "isDynamicEntry": true,
-    "imports": [
-      "_index-613948cd.js",
-      "src/routes/Header.svelte",
-      "src/routes/Menu.svelte"
-    ],
-    "css": [
-      "assets/pages/Writings.svelte-e5c9021d.css"
+      "assets/pages/Work.svelte-f28308a4.css"
     ]
   },
   "src/routes/iOSWork.svelte": {
-    "file": "pages/iOSWork.svelte-84ee8b2b.js",
+    "file": "pages/iOSWork.svelte-81c948b3.js",
     "src": "src/routes/iOSWork.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
@@ -193,11 +178,11 @@
       "src/routes/Menu.svelte"
     ],
     "css": [
-      "assets/pages/iOSWork.svelte-dc654aae.css"
+      "assets/pages/Work.svelte-f28308a4.css"
     ]
   },
   "src/routes/index.svelte": {
-    "file": "pages/index.svelte-595e5ee8.js",
+    "file": "pages/index.svelte-4f699a5d.js",
     "src": "src/routes/index.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
